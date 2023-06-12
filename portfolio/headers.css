@@ -1,7 +1,7 @@
 #btn-back-to-top {
 position: fixed;
-bottom: 20px;
-right: 20px;
+bottom: 50px;
+right: 50px;
 display: none;
 }
 
@@ -397,6 +397,7 @@ color: white;
 	background-size:cover;
 	background-position: center;
 	position: relative;
+  top:0;
 }
 .bg2{
 	background:black;
@@ -428,11 +429,6 @@ color: white;
 	position: relative;
 }
 
-.firstContent{
-	margin-top: 280px;
-	text-align: justify;
-	position: relative;
-}
 
 .play-on-hover{
 	cursor: pointer;
@@ -492,7 +488,6 @@ body{
 
 header{
 	background: rgba(0,0,0,0.6);
-	position: relative;
 }
 
  .footerbg{
@@ -516,6 +511,10 @@ header{
 /* Declare heights because of positioning of img element */
 .carousel-item {
   height: 32rem;
+}
+
+.firstContent{
+  margin-top: 380px;
 }
 
 
@@ -553,13 +552,29 @@ header{
 /* RESPONSIVE CSS
 -------------------------------------------------- */
 
-@media screen (min-width: 1360px) {
+@media only screen and (max-height: 768px) {
 	.firstContent{
-		margin-top:-60px;
-		position: relative;
+		margin-top:260px;
 	}
+  .bg1{
+    height: 700px;
+  }
+
+.contactPic{
+  width: 400px;
+  height: 400px;
+}
 
 }
+
+@media only screen and (max-height: 2000px) {
+.contactPic{
+  width: 350px;
+  height: 350px;
+}
+
+}
+
 
 
 @media (min-width: 40em) {
