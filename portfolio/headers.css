@@ -551,7 +551,6 @@ header{
 
 /* RESPONSIVE CSS
 -------------------------------------------------- */
-
 @media only screen and (max-height: 768px) {
 	.firstContent{
 		margin-top:260px;
@@ -565,9 +564,16 @@ header{
   height: 400px;
 }
 
+#btn-back-to-top {
+position: fixed;
+bottom: 25px;
+right: 25px;
+display: none;
 }
 
-@media only screen and (max-height: 2000px) {
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
 .contactPic{
   width: 350px;
   height: 350px;
