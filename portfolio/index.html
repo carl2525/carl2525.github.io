@@ -107,7 +107,7 @@
   </symbol>
 </svg>
 <main>
-  <div class="bg1"  id="home1">
+  <div class="bg1" id="home1">
     <div class="container">
     <div class="row">
       <div class="col-lg-12">
@@ -151,7 +151,15 @@
 <div class="col-lg-8">
     <div class="firstContent">
        <h1 class="text-10xl font-bold mb-2 dark-text-white" style="color:orange; font size:3.8rem; font-weight: bold;">Hi, I'm Carl Erwin</h1>
-       <h4 class="text-2xl font-medium text-gray-500 mb-9" style="color:white; font-weight: bold;">A BSIT Graduate at Rizal Technological University Boni Campus </h4><br>
+       <div class="scroller">
+       	<span class="text-3xl font-medium text-gray-500 mb-9" style="color:white; font-weight: bold;">A BSIT Graduate at Rizal Technological University Boni Campus<br>
+       		A Computer Technology Hobbyist<br>
+       		A Front-End Web Programmer Developer<br>
+       		A Back-End Web Programmer Developer<br>
+			A Video Editor and Cinematographer<br>
+			An Aspiring Fullstack Web Developer Programmer
+       	 </span>
+       </div><br>
        <p style="color:white; font-weight: bold;">Curently Seeking for an oppurtunity to implement and enhance my skills. On developing<br> website and application to the fullest extent of my capabilities</p>
        <button type="button" onclick="window.open('https://carl2525.github.io/Gorobao_Carl-Erwin_CV.pdf');" class="btn rounded-5" style="background-image: -webkit-linear-gradient(orange, black); font-size: 1em; color: white;">Download Resume</button>
    </div>
@@ -160,14 +168,14 @@
 </div>
 </div>
 <div class="bg3" id="progskills">
-  <div class="container">
+  <div class="container reveal fade-left">
 <br>
 <h1 class="text-10xl font-bold mt-5 dark-text-white" style="color:orange;  font size:3.8rem; font-weight: bold;">Programming Skills</h1>
        <hr style="color:white; border:5px solid white;right;border-radius: 5px; width:20%; "></hr><br>
    </div>
 
 <br>
-<div class="container">
+<div class="container reveal fade-left">
 <div class="row">
   <div class="col-sm-3" >
     <div class="card rounded-5 bg-transparent" id="frontend_skills">
@@ -208,12 +216,12 @@
 </div>
 </div>
 <br><br><br><br>
-  <div class="container">
+  <div class="container reveal fade-right">
   <h1 class="text-10xl font-bold mb-2 dark-text-white" style="color:orange; font size:3.8rem; font-weight: bold;">Non-Programming Skills</h1>
   <hr style="color:white; border:5px solid white;right;border-radius: 5px; width:20%;"></hr><br>
 
 
-<div class="container">
+<div class="container reveal fade-right">
 <div class="row">
   <div class="col-sm-2" >
     <div class="card rounded-5 bg-transparent" id="frontend_skills">
@@ -275,9 +283,11 @@
 <br><br><br><br>
 
 <div class="bg4" id="project"><br>
-  <div class="container">
+  <div class="container reveal fade-bottom">
     <center><h1 class="text-10xl font-bold mt-5 dark-text-white" style="color:orange;  font size:3.8rem; font-weight: bold;">Project Portfolio</h1>
        <hr style="color:white; border:5px solid white;right;border-radius: 5px; width:20%;"></hr></center><br>
+   </div>
+   <div class="container reveal fade-left">
       <div class="row">
         <div class="col-lg-4" style="margin-bottom:100px; ">
           <div class="mb-5 flipcard">
@@ -364,6 +374,8 @@
           </div>
         </div>
 </div>
+</div>
+<div class="container reveal fade-right">
 <div class="row">
         <div class="col-lg-4" style="margin-bottom:100px; ">
           <div class="mb-5 flipcard">
@@ -447,11 +459,12 @@
         </div>
       </div>
       </div>
+  </div>
       <br>
 
   <div class="bg5" id="contactme"><br>
     <div class="contactme">
-      <div class="container">
+      <div class="container reveal fade-bottom">
         <h1 class="text-10xl text-center font-bold mt-5 dark-text-white" style="color:orange;  font size:3.8rem; font-weight: bold;">Contact Me</h1>
        <center><hr style="color:white; border:5px solid white;right;border-radius: 5px; width:20%; "></hr></center><br>
        <div class="row">
@@ -509,6 +522,26 @@ function backToTop() {
 document.body.scrollTop = 0;
 document.documentElement.scrollTop = 0;
 }
+
+function reveal() {
+  var reveals = document.querySelectorAll(".reveal");
+
+  for (var i = 0; i < reveals.length; i++) {
+    var windowHeight = window.innerHeight;
+    var elementTop = reveals[i].getBoundingClientRect().top;
+    var elementVisible = 150;
+
+    if (elementTop < windowHeight - elementVisible) {
+      reveals[i].classList.add("active");
+    } else {
+      reveals[i].classList.remove("active");
+    }
+  }
+}
+
+window.addEventListener("scroll", reveal);
+
+
   </script>
 
 
@@ -530,7 +563,7 @@ document.documentElement.scrollTop = 0;
   <source src="img/rtudms.mp4" type="video/mp4" />
 </video>
     </div><br>
-        <div class=" col-lg-3 mb-5 skilsmodal" >
+        <div class=" col-lg-3 mb-5 skilsmodal reveal fade-bottom" >
           <br>
         <h2 style="background: -webkit-linear-gradient(orange, black);
   -webkit-background-clip: text;
@@ -563,7 +596,7 @@ document.documentElement.scrollTop = 0;
   <source src="img/brewed.mp4" type="video/mp4" />
 </video>
     </div><br>
-        <div class=" col-lg-3 mb-5 skilsmodal" >
+        <div class=" col-lg-3 mb-5 skilsmodal reveal fade-bottom" >
           <br><br>
         <h2 style="background: -webkit-linear-gradient(black, gray);
   -webkit-background-clip: text;
@@ -595,7 +628,7 @@ document.documentElement.scrollTop = 0;
           <div class="col-lg-9 mt-1" >
         <img src="img/enrollment.gif" class="card-img-top" alt="..." style="height: 700px;">
     </div><br>
-        <div class=" col-lg-3 mb-5 skilsmodal" >
+        <div class=" col-lg-3 mb-5 skilsmodal reveal fade-bottom" >
           <br><br><br><br>
         <h2 style="background: -webkit-linear-gradient(black, #027e96);
   -webkit-background-clip: text;
@@ -629,7 +662,7 @@ document.documentElement.scrollTop = 0;
   <source src="img/portfolio.mp4" type="video/mp4" />
 </video>
     </div><br>
-        <div class=" col-lg-3 mb-5 skilsmodal" >
+        <div class=" col-lg-3 mb-5 skilsmodal reveal fade-bottom" >
           <br><br><br><br><br><br><br>
         <h2 style="background: -webkit-linear-gradient(black, #027e96);
   -webkit-background-clip: text;
@@ -658,7 +691,7 @@ document.documentElement.scrollTop = 0;
   <source src="img/wordcrash.mp4" type="video/mp4" />
 </video>
     </div><br>
-        <div class=" col-lg-3 mb-5 skilsmodal" >
+        <div class=" col-lg-3 mb-5 skilsmodal reveal fade-bottom" >
           <br><br><br><br><br><br><br><br>
         <h2 style="background: -webkit-linear-gradient(black, gray);
   -webkit-background-clip: text;
@@ -688,7 +721,7 @@ document.documentElement.scrollTop = 0;
   <source src="img/boggsgrill.mp4" type="video/mp4" />
 </video>
     </div><br>
-        <div class=" col-lg-3 mb-5 skilsmodal" >
+        <div class=" col-lg-3 mb-5 skilsmodal reveal fade-bottom" >
           <br><br><br><br><br><br><br><br>
         <h2 style="background: -webkit-linear-gradient(orange, black);
   -webkit-background-clip: text;

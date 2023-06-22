@@ -1,3 +1,92 @@
+@import url("https://fonts.googleapis.com/css2?family=Asap&display=swap");
+
+
+.scroller {
+  height: 1.57em;
+  line-height: 1.6em;
+  position: relative;
+  overflow: hidden;
+  width: 45em;
+}
+.scroller > span {
+  position: absolute;
+  top: 0;
+  animation: slide 8s infinite;
+  font-weight: bold;
+  font-size: 20px;
+  
+}
+@keyframes slide {
+  0% {
+    top: 0;
+  }
+  16.7% {
+    top: -1.2em;
+  }
+  33.32% {
+    top: -2.4em;
+  }
+  49.98% {
+    top: -3.6em;
+  }
+  66.64% {
+    top: -4.8em;
+  }
+  83.3% {
+    top: -6em;
+  }
+}
+
+.reveal {
+  position: relative;
+  opacity: 0;
+}
+
+.reveal.active {
+  opacity: 1;
+}
+.active.fade-bottom {
+  animation: fade-bottom 1s ease-in;
+}
+.active.fade-left {
+  animation: fade-left 1s ease-in;
+}
+.active.fade-right {
+  animation: fade-right 1s ease-in;
+}
+@keyframes fade-bottom {
+  0% {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes fade-left {
+  0% {
+    transform: translateX(-100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-right {
+  0% {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+
 #btn-back-to-top {
 position: fixed;
 bottom: 50px;
@@ -33,6 +122,8 @@ orange;
   transform: scaleX(1);
   transform-origin: bottom left;
 }
+
+
 
 .btn, .btn:link, .btn:visited {
   text-transform: uppercase;
@@ -551,6 +642,7 @@ header{
 
 /* RESPONSIVE CSS
 -------------------------------------------------- */
+
 @media only screen and (max-height: 768px) {
 	.firstContent{
 		margin-top:260px;
