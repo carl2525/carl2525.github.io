@@ -6,7 +6,6 @@
   line-height: 1.6em;
   position: relative;
   overflow: hidden;
-  width: 45em;
 }
 .scroller > span {
   position: absolute;
