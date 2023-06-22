@@ -669,6 +669,42 @@ display: none;
   width: 350px;
   height: 350px;
 }
+@keyframes slide {
+  0% {
+    top: 0;
+  }
+  9.09% {
+    top: -1.2em;
+  }
+  18.18% {
+    top: -2.4em;
+  }
+  27.27% {
+    top: -3.6em;
+  }
+  36.36% {
+    top: -4.8em;
+  }
+  45.45% {
+    top: -6em;
+  }
+  54.54% {
+    top: -7.2em;
+  }
+  63.63% {
+    top: -8.4em;
+  }
+  72.72% {
+    top: -9.6em;
+  }
+  81.81% {
+    top: -10.8em;
+  }
+  90.9% {
+    top: -12.0em;
+  }
+}
+
 
 }
 
