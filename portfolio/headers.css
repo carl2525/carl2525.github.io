@@ -608,7 +608,6 @@ header{
   margin-top: 380px;
 }
 
-
 /* MARKETING CONTENT
 -------------------------------------------------- */
 
@@ -636,6 +635,11 @@ header{
 /* rtl:begin:remove */
 .featurette-heading {
   letter-spacing: -.05rem;
+}
+
+.contactPic{
+  width: 450px;
+  height: 450px;
 }
 
 /* rtl:end:remove */
