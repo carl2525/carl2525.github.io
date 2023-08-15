@@ -6,7 +6,6 @@
   line-height: 1.6em;
   position: relative;
   overflow: hidden;
-  width: 45em;
 }
 .scroller > span {
   position: absolute;
@@ -674,6 +673,30 @@ display: none;
   width: 350px;
   height: 350px;
 }
+@keyframes slide {
+  0% {
+    top: 0;
+  }
+  12.5% {
+    top: -1.2em;
+  }
+  25% {
+    top: -2.4em;
+  }
+  37.% {
+    top: -3.6em;
+  }
+  50% {
+    top: -4.8em;
+  }
+  62.5% {
+    top: -6em;
+  }
+ 87.5% {
+    top: -7.2em;
+  }
+}
+
 
 }
 
