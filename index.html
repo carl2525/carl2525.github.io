@@ -1,0 +1,1230 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Carl Erwin Gorobao | Web Developer Developer & Designer</title>
+    <meta name="description" content="Portfolio of Carl Erwin R. Gorobao, a BSIT graduate from RTU specializing in web development, digital design, and enterprise solutions." />
+    <meta name="keywords" content="Carl Erwin Gorobao, Portfolio, Web Developer, BSIT, RTU, Full-Stack, Designer, Philippines" />
+    <meta name="author" content="Carl Erwin Gorobao" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Carl Erwin Gorobao | Web Developer & Designer" />
+    <meta property="og:description" content="Modern, responsive portfolio of Carl Erwin R. Gorobao, a BSIT graduate specializing in web development and digital design." />
+    <meta property="og:image" content="https://picsum.photos/seed/carl/1200/630" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="Carl Erwin Gorobao | Web Developer & Designer" />
+    <meta property="twitter:description" content="Modern, responsive portfolio of Carl Erwin R. Gorobao, a BSIT graduate specializing in web development and digital design." />
+    <meta property="twitter:image" content="https://picsum.photos/seed/carl/1200/630" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+              display: ["Space Grotesk", "sans-serif"],
+            },
+            colors: {
+              orange: {
+                50: '#fdfaf1',
+                100: '#f9f1d9',
+                200: '#f1e0b0',
+                300: '#e7c87d',
+                400: '#dca94a',
+                500: '#d4af37',
+                600: '#b98e2b',
+                700: '#9a6e25',
+                800: '#7f5824',
+                900: '#694921',
+                950: '#3c270f',
+              },
+            },
+          },
+        },
+      }
+    </script>
+    <style type="text/tailwindcss">
+      @import "tailwindcss";
+
+      @layer base {
+        html {
+          scroll-behavior: smooth;
+        }
+        body {
+          @apply bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 font-sans antialiased selection:bg-orange-500/30 selection:text-orange-100 transition-colors duration-300;
+        }
+      }
+
+      @layer components {
+        .glass {
+          @apply bg-white/70 dark:bg-zinc-900/50 backdrop-blur-md border border-zinc-200/50 dark:border-zinc-800/50;
+        }
+
+        .text-gradient {
+          @apply bg-clip-text text-transparent bg-gradient-to-r from-orange-300 via-orange-500 to-amber-500;
+        }
+
+        .card-hover {
+          @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-orange-500/10;
+        }
+
+        /* Custom Scrollbar for Modal */
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          @apply bg-zinc-900/50 rounded-full;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          @apply bg-zinc-700 rounded-full hover:bg-orange-600 transition-colors;
+        }
+
+        /* Modal Animations */
+        @keyframes modal-in {
+          from { opacity: 0; transform: scale(0.95); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes modal-out {
+          from { opacity: 1; transform: scale(1); }
+          to { opacity: 0; transform: scale(0.95); }
+        }
+        @keyframes overlay-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes overlay-out {
+          from { opacity: 1; }
+          to { opacity: 0; }
+        }
+
+        .modal-animate-in {
+          animation: modal-in 0.3s ease-out forwards;
+        }
+        .modal-animate-out {
+          animation: modal-out 0.3s ease-in forwards;
+        }
+        .overlay-animate-in {
+          animation: overlay-in 0.3s ease-out forwards;
+        }
+        .overlay-animate-out {
+          animation: overlay-out 0.3s ease-in forwards;
+        }
+      }
+    </style>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+  lucide.createIcons();
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass border-b border-zinc-200/50 dark:border-zinc-800/50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+          <div class="text-2xl font-display font-bold text-gradient">
+            CE.GOROBAO
+          </div>
+
+          <!-- Desktop Menu -->
+          <div class="hidden md:flex items-center gap-6" id="desktop-menu">
+            <a href="#home" class="nav-link text-sm font-medium transition-colors hover:text-orange-400 capitalize text-orange-400" data-section="home">home</a>
+            <a href="#about" class="nav-link text-sm font-medium transition-colors hover:text-orange-400 capitalize text-zinc-500 dark:text-zinc-400" data-section="about">about</a>
+            <a href="#experience" class="nav-link text-sm font-medium transition-colors hover:text-orange-400 capitalize text-zinc-500 dark:text-zinc-400" data-section="experience">experience</a>
+            <a href="#projects" class="nav-link text-sm font-medium transition-colors hover:text-orange-400 capitalize text-zinc-500 dark:text-zinc-400" data-section="projects">projects</a>
+            <a href="#creative" class="nav-link text-sm font-medium transition-colors hover:text-orange-400 capitalize text-zinc-500 dark:text-zinc-400" data-section="creative">creative</a>
+            <a href="#skills" class="nav-link text-sm font-medium transition-colors hover:text-orange-400 capitalize text-zinc-500 dark:text-zinc-400" data-section="skills">skills</a>
+            <a href="#contact" class="nav-link text-sm font-medium transition-colors hover:text-orange-400 capitalize text-zinc-500 dark:text-zinc-400" data-section="contact">contact</a>
+            
+            <button id="theme-toggle" class="p-2 rounded-xl glass hover:bg-orange-500/10 transition-colors text-zinc-500 dark:text-zinc-400 hover:text-orange-500">
+              <i data-lucide="moon" class="w-5 h-5 dark:hidden"></i>
+              <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+            </button>
+          </div>
+
+          <!-- Mobile Menu Button -->
+          <div class="md:hidden flex items-center gap-2">
+            <button id="theme-toggle-mobile" class="p-2 rounded-xl glass text-zinc-500 dark:text-zinc-400">
+              <i data-lucide="moon" class="w-5 h-5 dark:hidden"></i>
+              <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+            </button>
+            <button id="menu-toggle" class="text-zinc-500 dark:text-zinc-400 hover:text-orange-500 p-2">
+              <i data-lucide="menu" id="menu-icon"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div id="mobile-menu" class="hidden md:hidden glass border-t border-zinc-200/50 dark:border-zinc-800/50 overflow-hidden">
+        <div class="px-4 pt-2 pb-6 space-y-1">
+          <a href="#home" class="mobile-nav-link block px-3 py-2 text-base font-medium text-zinc-500 dark:text-zinc-400 hover:text-orange-500 dark:hover:text-orange-400 hover:bg-zinc-100 dark:hover:bg-zinc-800/50 rounded-lg capitalize" data-section="home">home</a>
+          <a href="#about" class="mobile-nav-link block px-3 py-2 text-base font-medium text-zinc-500 dark:text-zinc-400 hover:text-orange-500 dark:hover:text-orange-400 hover:bg-zinc-100 dark:hover:bg-zinc-800/50 rounded-lg capitalize" data-section="about">about</a>
+          <a href="#experience" class="mobile-nav-link block px-3 py-2 text-base font-medium text-zinc-500 dark:text-zinc-400 hover:text-orange-500 dark:hover:text-orange-400 hover:bg-zinc-100 dark:hover:bg-zinc-800/50 rounded-lg capitalize" data-section="experience">experience</a>
+          <a href="#projects" class="mobile-nav-link block px-3 py-2 text-base font-medium text-zinc-500 dark:text-zinc-400 hover:text-orange-500 dark:hover:text-orange-400 hover:bg-zinc-100 dark:hover:bg-zinc-800/50 rounded-lg capitalize" data-section="projects">projects</a>
+          <a href="#creative" class="mobile-nav-link block px-3 py-2 text-base font-medium text-zinc-500 dark:text-zinc-400 hover:text-orange-500 dark:hover:text-orange-400 hover:bg-zinc-100 dark:hover:bg-zinc-800/50 rounded-lg capitalize" data-section="creative">creative</a>
+          <a href="#skills" class="mobile-nav-link block px-3 py-2 text-base font-medium text-zinc-500 dark:text-zinc-400 hover:text-orange-500 dark:hover:text-orange-400 hover:bg-zinc-100 dark:hover:bg-zinc-800/50 rounded-lg capitalize" data-section="skills">skills</a>
+          <a href="#contact" class="mobile-nav-link block px-3 py-2 text-base font-medium text-zinc-500 dark:text-zinc-400 hover:text-orange-500 dark:hover:text-orange-400 hover:bg-zinc-100 dark:hover:bg-zinc-800/50 rounded-lg capitalize" data-section="contact">contact</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+      <div class="absolute inset-0 z-0 pointer-events-none">
+        <div id="hero-spotlight" class="absolute inset-0 bg-[radial-gradient(circle_at_var(--x)_var(--y),rgba(249,115,22,0.15),transparent_25%)] opacity-0 transition-opacity duration-500"></div>
+        <div id="hero-blob-1" class="absolute top-1/4 left-1/4 w-96 h-96 bg-orange-600/20 rounded-full blur-[128px] dark:opacity-100 opacity-50 transition-transform duration-700 ease-out"></div>
+        <div id="hero-blob-2" class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-amber-600/20 rounded-full blur-[128px] dark:opacity-100 opacity-50 transition-transform duration-1000 ease-out"></div>
+        <canvas id="hero-particles" class="absolute inset-0 w-full h-full"></canvas>
+      </div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div id="hero-content" class="text-center animate-float transition-transform duration-200 ease-out">
+          <span class="inline-block px-4 py-1.5 rounded-full glass text-xs font-semibold tracking-wider text-orange-500 dark:text-orange-400 uppercase mb-6 animate-pulse-glow">
+            Available for New Opportunities
+          </span>
+          <h1 class="text-5xl md:text-7xl font-display font-bold tracking-tight mb-6 text-zinc-900 dark:text-white">
+            Building <span id="typewriter" class="text-gradient">Digital Experiences</span><span class="text-orange-500 animate-pulse">|</span><br />
+            <span class="text-zinc-400 dark:text-zinc-600">With Precision & Passion</span>
+          </h1>
+          <p class="max-w-2xl mx-auto text-lg text-zinc-600 dark:text-zinc-400 mb-10 leading-relaxed">
+            Hi, I'm Carl Erwin Gorobao. A BSIT Graduate specializing in web development, 
+            digital design, video editing, and creating seamless user experiences.
+          </p>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="#projects" class="w-full sm:w-auto px-8 py-4 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2 group shadow-lg shadow-orange-600/20">
+              View My Work
+              <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+            </a>
+            <a href="#contact" class="w-full sm:w-auto px-8 py-4 glass hover:bg-zinc-100 dark:hover:bg-zinc-800/50 text-zinc-900 dark:text-white font-semibold rounded-xl transition-all">
+              Contact Me
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <a href="#about" class="absolute bottom-10 left-1/2 -translate-x-1/2 text-zinc-400 dark:text-zinc-500 animate-bounce hover:text-orange-500 dark:hover:text-orange-400 transition-colors cursor-pointer z-20">
+        <i data-lucide="chevron-down" class="w-6 h-6"></i>
+      </a>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 lg:py-32 bg-zinc-100/50 dark:bg-zinc-900/30">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+          <div class="relative">
+            <div class="aspect-square rounded-3xl overflow-hidden glass p-4">
+              <img src="src/images/CarlErwinGorobao.webp" alt="Carl Erwin Gorobao" class="w-full h-full object-cover rounded-2xl grayscale-[25%] hover:grayscale-0 transition-all duration-500" referrerPolicy="no-referrer">
+            </div>
+            <div class="absolute -bottom-6 -right-6 glass p-6 rounded-2xl hidden md:block">
+              <div class="text-3xl font-bold text-orange-500 dark:text-orange-400">BSIT</div>
+              <div class="text-sm text-zinc-500 dark:text-zinc-400">Graduate @ RTU</div>
+            </div>
+          </div>
+
+          <div>
+            <h2 class="text-3xl md:text-4xl font-display font-bold mb-6 text-zinc-900 dark:text-white">
+              Passionate Developer <br />
+              <span class="text-orange-500 dark:text-orange-400">& Creative Problem Solver</span>
+            </h2>
+            <div class="space-y-4 text-zinc-600 dark:text-zinc-400 text-lg leading-relaxed">
+              <p>
+                I graduated in 2023 with a degree on Bachelor of Science in Information Technology and have an experience in web design and development, creating clean and SEO friendly websites. I also enjoy video editing and work with CapCut and Adobe Premiere Pro to produce engaging content.
+              </p>
+              <p> I’m always eager to learn new tools, improve my skills, and take on creative projects or system where I can combine both design and technical aspects on the task that I created.
+              </p>
+            </div>
+            
+            <div class="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+              <div class="glass p-4 rounded-xl">
+                <div class="text-2xl font-bold text-orange-600 dark:text-orange-400 mb-1">2+</div>
+                <div class="text-sm text-zinc-600 dark:text-zinc-500 uppercase tracking-wider font-semibold">Years Experience</div>
+              </div>
+              <div class="glass p-4 rounded-xl">
+                <div class="text-2xl font-bold text-orange-600 dark:text-orange-400 mb-1">Diverse</div>
+                <div class="text-sm text-zinc-600 dark:text-zinc-500 uppercase tracking-wider font-semibold">Skill Set</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Work Experience Section -->
+    <section id="experience" class="py-20 lg:py-32">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-16">
+          <h2 class="text-3xl md:text-4xl font-display font-bold mb-4 text-zinc-900 dark:text-white">Work Experience</h2>
+          <p class="text-zinc-600 dark:text-zinc-400 max-w-xl">
+            My professional journey and the impact I've made in the tech industry.
+          </p>
+        </div>
+
+        <div class="space-y-8">
+          <!-- Experience 1 -->
+          <div class="glass p-8 rounded-3xl relative overflow-hidden group">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-orange-600/5 dark:bg-orange-600/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2"></div>
+            <div class="relative z-10">
+              <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                <div>
+                  <h3 class="text-2xl font-bold text-zinc-900 dark:text-white group-hover:text-orange-500 dark:group-hover:text-orange-400 transition-colors">Web Designer</h3>
+                  <div class="text-orange-600 dark:text-orange-400 font-medium">411BPO / 411Locals</div>
+                </div>
+                <div class="px-4 py-1.5 rounded-full glass text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+                  Feb 2024 - Feb 2026
+                </div>
+              </div>
+              <ul class="space-y-3 text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                <li class="flex gap-3">
+                  <span class="text-orange-500 dark:text-orange-400 mt-1.5">•</span>
+                  <span>Design and Maintaining Website Using Wordpress CMS and Utilized Divi Builder Plugin to Customize and modify every content for the Website</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="text-orange-500 dark:text-orange-400 mt-1.5">•</span>
+                  <span>Implement Basic SEO Strategies and Integrates Efficient Techniques on Images/Data to ensure minimal loading speeds of the website</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="text-orange-500 dark:text-orange-400 mt-1.5">•</span>
+                  <span>Creating SEO Friendly Websites or Design for the Client of the company and Implementing Efficient method to achieve highest KPI as possible.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Experience 2 -->
+          <div class="glass p-8 rounded-3xl relative overflow-hidden group">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-orange-600/5 dark:bg-orange-600/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2"></div>
+            <div class="relative z-10">
+              <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                <div>
+                  <h3 class="text-2xl font-bold text-zinc-900 dark:text-white group-hover:text-orange-500 dark:group-hover:text-orange-400 transition-colors">Web Developer Intern</h3>
+                  <div class="text-orange-600 dark:text-orange-400 font-medium">RTU Boni Campus</div>
+                </div>
+                <div class="px-4 py-1.5 rounded-full glass text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+                  Sept 2022 - Dec 2022
+                </div>
+              </div>
+              <ul class="space-y-3 text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                <li class="flex gap-3">
+                  <span class="text-orange-500 dark:text-orange-400 mt-1.5">•</span>
+                  <span>Lead Developer and Project leader of RTU: Web Based Document Management System</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="text-orange-500 dark:text-orange-400 mt-1.5">•</span>
+                  <span>Rendered a total of 300 hours, created UI/UX of the system and Applied Framework, Hosting, Front and Back End development in creating the system.</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="text-orange-500 dark:text-orange-400 mt-1.5">•</span>
+                  <span>Uses Laravel Framework, Front-End Design of HTML5, CSS3, JavaScript, jQuery, Ajax, Bootstrap. Back-End of PHP, JavaScript. Database of PhpMyAdmin, MySQL. And published on 000webhost</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Experience 3 -->
+          <div class="glass p-8 rounded-3xl relative overflow-hidden group">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-orange-600/5 dark:bg-orange-600/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2"></div>
+            <div class="relative z-10">
+              <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                <div>
+                  <h3 class="text-2xl font-bold text-zinc-900 dark:text-white group-hover:text-orange-500 dark:group-hover:text-orange-400 transition-colors">Data Encoder Intern</h3>
+                  <div class="text-orange-600 dark:text-orange-400 font-medium">Margarito A. Duavit Memorial Hospital</div>
+                </div>
+                <div class="px-4 py-1.5 rounded-full glass text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+                  Dec 2018 - Mar 2019
+                </div>
+              </div>
+              <ul class="space-y-3 text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                <li class="flex gap-3">
+                  <span class="text-orange-500 dark:text-orange-400 mt-1.5">•</span>
+                  <span>80 Hours of Work Immersion in the Philhealth Section as Data Encoder</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="text-orange-500 dark:text-orange-400 mt-1.5">•</span>
+                  <span>Maintained and Organized Numerous Philhealth Files, and Manually and Automatically Track All the Data Files</span>
+                </li>
+                 <li class="flex gap-3">
+                  <span class="text-orange-500 dark:text-orange-400 mt-1.5">•</span>
+                  <span>Encoding Data to the Microsoft Excel, and Word</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 lg:py-32 bg-zinc-100/50 dark:bg-zinc-900/30">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+          <div>
+            <h2 class="text-3xl md:text-4xl font-display font-bold mb-4 text-zinc-900 dark:text-white">Featured Projects</h2>
+            <p class="text-zinc-600 dark:text-zinc-400 max-w-xl">
+              A selection of my recent work, ranging from enterprise systems to creative experiments.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Project 1 -->
+          <div class="group glass rounded-3xl overflow-hidden card-hover cursor-pointer" onclick="openProjectModal('rtu-dms')">
+            <div class="aspect-video relative overflow-hidden">
+              <img src="src/images/rtudms.webp" alt="RTU DMS" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" referrerPolicy="no-referrer">
+              <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-60"></div>
+              <div class="absolute top-4 left-4">
+                <span class="px-3 py-1 rounded-full glass text-[10px] font-bold uppercase tracking-widest text-orange-600 dark:text-orange-400">Web Based App</span>
+              </div>
+            </div>
+            <div class="p-8">
+              <h3 class="text-2xl font-bold mb-3 text-zinc-900 dark:text-white group-hover:text-orange-500 dark:group-hover:text-orange-400 transition-colors">RTU Document Management System</h3>
+              <p class="text-zinc-600 dark:text-zinc-400 mb-6 line-clamp-2">A web-based document management system for Rizal Technological University, streamlining administrative workflows.</p>
+              <div class="flex flex-wrap gap-2 mb-8">
+                <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">#Project Leader</span>
+                <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">#Lead Programmer</span>
+                <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">#Laravel</span>
+                <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">#PHP</span>
+                <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">#MySQL</span>
+              </div>
+              <div class="flex items-center gap-4">
+                <button onclick="openProjectModal('rtu-dms')" class="flex items-center gap-2 text-sm font-bold text-zinc-900 dark:text-white hover:text-orange-500 dark:hover:text-orange-400 transition-colors">
+                  <i data-lucide="external-link" class="w-4 h-4"></i>
+                  View Details
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 2 -->
+          <div class="group glass rounded-3xl overflow-hidden card-hover cursor-pointer" onclick="openProjectModal('vcdc-portal')">
+            <div class="aspect-video relative overflow-hidden">
+              <img src="src/images/vcd.webp" alt="VCDC Portal" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" referrerPolicy="no-referrer">
+              <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-60"></div>
+              <div class="absolute top-4 left-4">
+                <span class="px-3 py-1 rounded-full glass text-[10px] font-bold uppercase tracking-widest text-orange-600 dark:text-orange-400">GiG/Freelance</span>
+              </div>
+            </div>
+            <div class="p-8">
+              <h3 class="text-2xl font-bold mb-3 text-zinc-900 dark:text-white group-hover:text-orange-500 dark:group-hover:text-orange-400 transition-colors">VCDC - Gio Portal</h3>
+              <p class="text-zinc-600 dark:text-zinc-400 mb-6 line-clamp-2">Marketing Website for Gio - Victor Consunji Development Corporation, it highlights the best unique feature of the houses.</p>
+              <div class="flex flex-wrap gap-2 mb-8">
+                <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">#Web Developer</span>
+                <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">#WordPress</span>
+                <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">#PHP</span>
+              </div>
+              <div class="flex items-center gap-4">
+                <button onclick="openProjectModal('vcdc-portal')" class="flex items-center gap-2 text-sm font-bold text-zinc-900 dark:text-white hover:text-orange-500 dark:hover:text-orange-400 transition-colors">
+                  <i data-lucide="external-link" class="w-4 h-4"></i>
+                  View Details
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 3 -->
+          <div class="group glass rounded-3xl overflow-hidden card-hover sm:col-span-2 lg:col-span-1 flex flex-col sm:flex-row lg:flex-col cursor-pointer" onclick="openProjectModal('coffee-pos')">
+            <div class="aspect-video relative overflow-hidden w-full sm:w-1/2 lg:w-full shrink-0">
+              <img src="src/images/brewed.webp" alt="Brewed Specialty Coffee POS" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" referrerPolicy="no-referrer">
+              <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-60"></div>
+              <div class="absolute top-4 left-4">
+                <span class="px-3 py-1 rounded-full glass text-[10px] font-bold uppercase tracking-widest text-orange-600 dark:text-orange-400">POS System</span>
+              </div>
+            </div>
+            <div class="p-8 w-full sm:w-1/2 lg:w-full flex flex-col justify-center">
+              <h3 class="text-2xl font-bold mb-3 text-zinc-900 dark:text-white group-hover:text-orange-500 dark:group-hover:text-orange-400 transition-colors">Brewed Specialty Coffee Point of Sales System</h3>
+              <p class="text-zinc-600 dark:text-zinc-400 mb-6 line-clamp-2">A comprehensive POS system designed for brewed specialty coffee shops, featuring inventory management and sales tracking.</p>
+              <div class="flex flex-wrap gap-2 mb-8">
+                <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">#Web Developer</span>
+                <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">#PHP</span>
+                <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">#MySQL</span>
+              </div>
+              <div class="flex items-center gap-4">
+                <button onclick="openProjectModal('coffee-pos')" class="flex items-center gap-2 text-sm font-bold text-zinc-900 dark:text-white hover:text-orange-500 dark:hover:text-orange-400 transition-colors">
+                  <i data-lucide="external-link" class="w-4 h-4"></i>
+                  View Details
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-12 text-center">
+          <a href="https://github.com/carl2525?tab=repositories" 
+             target="_blank" 
+             rel="noopener noreferrer"
+             class="inline-flex items-center gap-2 px-8 py-4 glass hover:bg-orange-600 hover:text-white text-zinc-900 dark:text-white font-bold rounded-xl transition-all group">
+              See More Work
+              <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Creative Works Section -->
+    <section id="creative" class="py-20 lg:py-32">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-16">
+          <h2 class="text-3xl md:text-4xl font-display font-bold mb-4 text-zinc-900 dark:text-white">Video Creative Works</h2>
+          <p class="text-zinc-600 dark:text-zinc-400 max-w-xl">
+            A showcase of my video editing, motion graphics, and creative storytelling projects.
+          </p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Maldicion Notebook -->
+          <div class="group glass rounded-3xl overflow-hidden card-hover cursor-pointer" onclick="openProjectModal('maldicion-notebook')">
+            <div class="aspect-video relative overflow-hidden">
+              <img src="src/images/Maldicion Notebook.webp" alt="Maldicion Notebook" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" referrerPolicy="no-referrer">
+              <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-60"></div>
+              <div class="absolute top-4 left-4">
+                <span class="px-3 py-1 rounded-full glass text-[10px] font-bold uppercase tracking-widest text-orange-600 dark:text-orange-400">Creative</span>
+              </div>
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2 text-zinc-900 dark:text-white group-hover:text-orange-500 dark:group-hover:text-orange-400 transition-colors">Maldicion Notebook</h3>
+              <p class="text-zinc-600 dark:text-zinc-400 text-sm mb-6 line-clamp-2">A creative video project exploring storytelling through visual metaphors and motion graphics.</p>
+              <div class="flex items-center gap-4">
+                <button onclick="openProjectModal('maldicion-notebook')" class="flex items-center gap-2 text-sm font-bold text-zinc-900 dark:text-white hover:text-orange-500 dark:hover:text-orange-400 transition-colors">
+                  <i data-lucide="play" class="w-4 h-4"></i>
+                  Watch Video
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- RTU Vlog Finale -->
+          <div class="group glass rounded-3xl overflow-hidden card-hover cursor-pointer" onclick="openProjectModal('rtu-vlog')">
+            <div class="aspect-video relative overflow-hidden">
+              <img src="src/images/Rtu Vlog Finale.webp" alt="RTU Vlog Finale" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" referrerPolicy="no-referrer">
+              <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-60"></div>
+              <div class="absolute top-4 left-4">
+                <span class="px-3 py-1 rounded-full glass text-[10px] font-bold uppercase tracking-widest text-orange-600 dark:text-orange-400">Vlog</span>
+              </div>
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2 text-zinc-900 dark:text-white group-hover:text-orange-500 dark:group-hover:text-orange-400 transition-colors">RTU Vlog Finale</h3>
+              <p class="text-zinc-600 dark:text-zinc-400 text-sm mb-6 line-clamp-2">The concluding chapter of the RTU vlog series, capturing the essence of student life and campus memories.</p>
+              <div class="flex items-center gap-4">
+                <button onclick="openProjectModal('rtu-vlog')" class="flex items-center gap-2 text-sm font-bold text-zinc-900 dark:text-white hover:text-orange-500 dark:hover:text-orange-400 transition-colors">
+                  <i data-lucide="play" class="w-4 h-4"></i>
+                  Watch Video
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- WordCrash Infomercial -->
+          <div class="group glass rounded-3xl overflow-hidden card-hover sm:col-span-2 lg:col-span-1 flex flex-col sm:flex-row lg:flex-col cursor-pointer" onclick="openProjectModal('wordcrash')">
+            <div class="aspect-video relative overflow-hidden w-full sm:w-1/2 lg:w-full shrink-0">
+              <img src="src/images/WordCrash Infomercial.webp" alt="WordCrash Infomercial" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" referrerPolicy="no-referrer">
+              <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-60"></div>
+              <div class="absolute top-4 left-4">
+                <span class="px-3 py-1 rounded-full glass text-[10px] font-bold uppercase tracking-widest text-orange-600 dark:text-orange-400">Infomercial</span>
+              </div>
+            </div>
+            <div class="p-6 w-full sm:w-1/2 lg:w-full flex flex-col justify-center">
+              <h3 class="text-xl font-bold mb-2 text-zinc-900 dark:text-white group-hover:text-orange-500 dark:group-hover:text-orange-400 transition-colors">WordCrash Infomercial</h3>
+              <p class="text-zinc-600 dark:text-zinc-400 text-sm mb-6 line-clamp-2">A fast-paced, engaging infomercial designed to showcase features and benefits with dynamic editing.</p>
+              <div class="flex items-center gap-4">
+                <button onclick="openProjectModal('wordcrash')" class="flex items-center gap-2 text-sm font-bold text-zinc-900 dark:text-white hover:text-orange-500 dark:hover:text-orange-400 transition-colors">
+                  <i data-lucide="play" class="w-4 h-4"></i>
+                  Watch Video
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-12 text-center">
+          <a href="https://drive.google.com/drive/folders/1gq4Iu3j7Q4xr6x9E10XpO9VTuZdO_NwG?usp=sharing" 
+             target="_blank" 
+             rel="noopener noreferrer"
+             class="inline-flex items-center gap-2 px-8 py-4 glass hover:bg-orange-600 hover:text-white text-zinc-900 dark:text-white font-bold rounded-xl transition-all group">
+            See More Video
+            <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 lg:py-32 bg-zinc-100/50 dark:bg-zinc-900/30">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl md:text-4xl font-display font-bold mb-4 text-zinc-900 dark:text-white">Technical Expertise</h2>
+          <p class="text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
+            A comprehensive list of tools and technologies I use to bring ideas to life.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Front-End -->
+          <div class="glass p-8 rounded-2xl card-hover group">
+            <div class="flex items-center gap-4 mb-6">
+              <div class="p-3 rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400 group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                <i data-lucide="layout" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-xl font-bold text-zinc-900 dark:text-white">Front-End</h3>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">WordPress</span>
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">HTML5</span>
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">CSS3</span>
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">JavaScript</span>
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">Bootstrap</span>
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">Tailwind</span>
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">JQuery</span>
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">AJAX</span>
+            </div>
+          </div>
+
+          <!-- Back-End -->
+          <div class="glass p-8 rounded-2xl card-hover group">
+            <div class="flex items-center gap-4 mb-6">
+              <div class="p-3 rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400 group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                <i data-lucide="code-2" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-xl font-bold text-zinc-900 dark:text-white">Back-End</h3>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">Laravel</span>
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">PHP</span>
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">JavaScript</span>
+            </div>
+          </div>
+
+          <!-- Database -->
+          <div class="glass p-8 rounded-2xl card-hover group">
+            <div class="flex items-center gap-4 mb-6">
+              <div class="p-3 rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400 group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                <i data-lucide="database" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-xl font-bold text-zinc-900 dark:text-white">Database</h3>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">MySQL</span>
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">SQL</span>
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">PHPMyAdmin</span>
+            </div>
+          </div>
+
+          <!-- Design -->
+          <div class="glass p-8 rounded-2xl card-hover group">
+            <div class="flex items-center gap-4 mb-6">
+              <div class="p-3 rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400 group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                <i data-lucide="palette" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-xl font-bold text-zinc-900 dark:text-white">Design</h3>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">Canva</span>
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">Figma</span>
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">Adobe Photoshop</span>
+            </div>
+          </div>
+
+          <!-- Video Editing Tool -->
+          <div class="glass p-8 rounded-2xl card-hover group">
+            <div class="flex items-center gap-4 mb-6">
+              <div class="p-3 rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400 group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                <i data-lucide="video" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-xl font-bold text-zinc-900 dark:text-white">Video Editing Tool</h3>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">CapCut</span>
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">Adobe Premiere Pro</span>
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">Adobe After Effects</span>
+            </div>
+          </div>
+
+          <!-- Others -->
+          <div class="glass p-8 rounded-2xl card-hover group">
+            <div class="flex items-center gap-4 mb-6">
+              <div class="p-3 rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400 group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                <i data-lucide="wrench" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-xl font-bold text-zinc-900 dark:text-white">Others</h3>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">XAMMP</span>
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">Microsoft Office</span>
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">Basic SEO</span>
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">AI Tools</span>
+              <span class="px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-sm border border-zinc-300/50 dark:border-zinc-700/50">Computer Troubleshooting</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 lg:py-32">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="glass rounded-3xl md:rounded-[40px] p-6 sm:p-8 md:p-16 relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-96 h-96 bg-orange-600/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
+          
+          <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 relative z-10">
+            <div>
+              <h2 class="text-3xl sm:text-4xl md:text-5xl font-display font-bold mb-6 text-zinc-900 dark:text-white">
+                Let's Build Something <br />
+                <span class="text-gradient">Great Together</span>
+              </h2>
+              <p class="text-zinc-600 dark:text-zinc-400 text-base sm:text-lg mb-10">
+                I'm always open to discussing new projects, creative ideas or opportunities to be part of your visions.
+              </p>
+              
+              <div class="space-y-6">
+                <div class="flex items-center gap-4 group">
+                  <div class="p-3 sm:p-4 rounded-2xl bg-zinc-200/50 dark:bg-zinc-800/50 text-orange-600 dark:text-orange-400 group-hover:bg-orange-600 group-hover:text-white transition-all">
+                    <i data-lucide="mail" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <div class="text-xs sm:text-sm text-zinc-500 uppercase tracking-wider font-semibold">Email Me</div>
+                    <div class="text-base sm:text-lg font-medium truncate text-zinc-900 dark:text-white">carl.gorobao2525@gmail.com</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-4 group">
+                  <div class="p-3 sm:p-4 rounded-2xl bg-zinc-200/50 dark:bg-zinc-800/50 text-orange-600 dark:text-orange-400 group-hover:bg-orange-600 group-hover:text-white transition-all">
+                    <i data-lucide="map-pin" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <div class="text-xs sm:text-sm text-zinc-500 uppercase tracking-wider font-semibold">Location</div>
+                    <div class="text-base sm:text-lg font-medium truncate text-zinc-900 dark:text-white">Mandaluyong City, Philippines</div>
+                  </div>
+                </div>
+              </div>
+
+            <div class="mt-10 flex flex-wrap gap-3 sm:gap-4">
+              <a href="https://github.com/carl2525" target="_blank" rel="noopener noreferrer"
+                 class="group p-3 sm:p-4 rounded-2xl glass hover:bg-orange-600 transition-all">
+                <i class="fa-brands fa-github text-zinc-500 dark:text-zinc-400 group-hover:text-white text-xl transition-colors"></i>
+              </a>
+
+              <a href="https://linkedin.com/in/cergorobao25"
+                 class="group p-3 sm:p-4 rounded-2xl glass hover:bg-orange-600 transition-all">
+                <i class="fa-brands fa-linkedin text-zinc-500 dark:text-zinc-400 group-hover:text-white text-xl transition-colors"></i>
+              </a>
+
+            </div>
+            </div>
+
+            <form id="contact-form" class="space-y-4">
+              <div class="grid sm:grid-cols-2 gap-4">
+                <input id="contact-name" type="text" placeholder="Your Name" required class="w-full px-5 py-3 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl bg-zinc-100/50 dark:bg-zinc-800/30 border border-zinc-200 dark:border-zinc-700/50 focus:border-orange-500 focus:outline-none transition-colors text-sm sm:text-base text-zinc-900 dark:text-white placeholder:text-zinc-500">
+                <input id="contact-email" type="email" placeholder="Your Email" required class="w-full px-5 py-3 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl bg-zinc-100/50 dark:bg-zinc-800/30 border border-zinc-200 dark:border-zinc-700/50 focus:border-orange-500 focus:outline-none transition-colors text-sm sm:text-base text-zinc-900 dark:text-white placeholder:text-zinc-500">
+              </div>
+              <input id="contact-subject" type="text" placeholder="Subject" required class="w-full px-5 py-3 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl bg-zinc-100/50 dark:bg-zinc-800/30 border border-zinc-200 dark:border-zinc-700/50 focus:border-orange-500 focus:outline-none transition-colors text-sm sm:text-base text-zinc-900 dark:text-white placeholder:text-zinc-500">
+              <textarea id="contact-message" placeholder="Your Message" rows="4" required class="w-full px-5 py-3 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl bg-zinc-100/50 dark:bg-zinc-800/30 border border-zinc-200 dark:border-zinc-700/50 focus:border-orange-500 focus:outline-none transition-colors resize-none text-sm sm:text-base text-zinc-900 dark:text-white placeholder:text-zinc-500"></textarea>
+              <button type="submit" class="w-full py-3 sm:py-4 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl sm:rounded-2xl transition-all shadow-lg shadow-orange-600/20 text-sm sm:text-base">
+                Send Message
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Project Modal -->
+    <div id="project-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 sm:p-6">
+      <div id="modal-overlay" class="absolute inset-0 bg-zinc-900/80 dark:bg-zinc-950/80 backdrop-blur-sm" onclick="closeProjectModal()"></div>
+      <div id="modal-content" class="glass w-full max-w-4xl rounded-[32px] overflow-hidden relative z-10">
+        <button onclick="closeProjectModal()" class="absolute top-6 right-6 p-2 rounded-full glass hover:bg-orange-600 text-zinc-900 dark:text-white hover:text-white transition-all z-20">
+          <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+        
+        <div class="flex flex-col lg:flex-row h-full max-h-[90vh] overflow-y-auto overflow-x-hidden custom-scrollbar">
+          <!-- Video Section -->
+          <div class="w-full lg:w-3/5 bg-black aspect-video lg:aspect-auto">
+            <div id="modal-video-container" class="w-full h-full flex items-center justify-center bg-zinc-100 dark:bg-zinc-900">
+              <!-- Video or Placeholder will be inserted here -->
+              <div class="text-center p-8">
+                <i data-lucide="play-circle" class="w-16 h-16 text-orange-500/50 mx-auto mb-4"></i>
+                <p class="text-zinc-500 font-medium">Project Demonstration Video</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Content Section -->
+          <div class="w-full lg:w-2/5 p-8 sm:p-10 flex flex-col">
+            <div id="modal-badge" class="mb-4">
+              <span class="px-3 py-1 rounded-full glass text-[10px] font-bold uppercase tracking-widest text-orange-600 dark:text-orange-400">Category</span>
+            </div>
+            <h3 id="modal-title" class="text-2xl sm:text-3xl font-display font-bold mb-6 text-zinc-900 dark:text-white">Project Title</h3>
+            <div class="space-y-4 text-zinc-600 dark:text-zinc-400 text-sm sm:text-base leading-relaxed mb-8">
+              <p id="modal-description">Detailed project description goes here...</p>
+            </div>
+            
+            <div class="mt-auto">
+              <div class="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-4">Technologies Used</div>
+              <div id="modal-tags" class="flex flex-wrap gap-2 mb-8">
+                <!-- Tags will be inserted here -->
+              </div>
+              
+              <a id="modal-link" href="#" target="_blank" class="w-full py-4 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-2xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-orange-600/20">
+                <i data-lucide="external-link" class="w-5 h-5"></i>
+                <span id="modal-link-text">Go to Application</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-zinc-200 dark:border-zinc-800/50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="text-xl font-display font-bold text-gradient mb-4">CE.GOROBAO</div>
+        <p class="text-zinc-600 dark:text-zinc-500 text-sm">
+          &copy; <span id="year"></span> Carl Erwin Gorobao. All rights reserved.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      // Set current year
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+
+    <script>
+      // Initialize Lucide icons
+      lucide.createIcons();
+
+      // Set current year
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      // Mobile Menu Toggle
+      const menuToggle = document.getElementById('menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+
+      function updateMenuIcon(isOpen) {
+        const menuIconContainer = menuToggle;
+        menuIconContainer.innerHTML = `<i data-lucide="${isOpen ? 'x' : 'menu'}" id="menu-icon"></i>`;
+        lucide.createIcons();
+      }
+
+      menuToggle.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+        const isOpen = !mobileMenu.classList.contains('hidden');
+        updateMenuIcon(isOpen);
+      });
+
+      // Close mobile menu on link click
+      document.querySelectorAll('.mobile-nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.add('hidden');
+          updateMenuIcon(false);
+        });
+      });
+
+      // Scroll Spy
+      const sections = document.querySelectorAll('section');
+      const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
+
+      window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.clientHeight;
+          if (pageYOffset >= sectionTop - 200) {
+            current = section.getAttribute('id');
+          }
+        });
+
+        navLinks.forEach(link => {
+          link.classList.remove('text-orange-500', 'dark:text-orange-400');
+          link.classList.add('text-zinc-500', 'dark:text-zinc-400');
+          if (link.getAttribute('data-section') === current) {
+            link.classList.remove('text-zinc-500', 'dark:text-zinc-400');
+            link.classList.add('text-orange-500', 'dark:text-orange-400');
+          }
+        });
+      });
+
+      // Project Modal Logic
+      const projectData = {
+        'rtu-dms': {
+          title: 'RTU Document Management System',
+          category: 'Web App',
+          description: 'The Web-based Document Management System at Rizal Technological University is a secure, user-friendly application that streamlines document organization and tracking. By solving issues like slow signing, misplaced files, and manual counting with features such as automated tracking, easy sharing, and activity logging, it saves time and enhances efficiency across the university.',
+          tags: ['Project Leader', 'Lead Programmer', 'Laravel', 'HTML5', 'CSS3', 'JavaScript', 'PHP', 'JQuery', 'AJAX', 'XAMMP', 'MySQL', 'PHPMyAdmin', 'Bootstrap', 'Hosting'],
+
+          video: 'src/images/rtudms.webp',
+          videoUrl: 'src/videos/rtudms.mp4',
+          url: 'https://github.com/carl2525/RTU-DOCUMENT-MANAGEMENT-SYSTEM'
+        },
+        'vcdc-portal': {
+          title: 'VCDC - Gio Portal',
+          category: 'Enterprise',
+          description: 'A web-based application built with WordPress to market and promote Victor Consunji Development Corporation. It highlights the company’s products and services and serves as a marketing tool for Gio, one of VCD’s sales consultants.',
+          tags: ['Web Developer', 'WordPress', 'HTML5', 'CSS3', 'JavaScript'],
+          video: 'src/videos/vcd.webp',
+          videoUrl: 'src/videos/vcd.mp4',
+          url: 'https://giovdcsales.wordpress.com/'
+        },
+        'coffee-pos': {
+          title: 'Brewed Specialty Coffee POS',
+          category: 'POS System',
+          description: 'The Web-based Ordering System for Brewed Specialty Coffee is a secure and user-friendly application designed to streamline customer orders. It resolves challenges such as ordering delays, customer queuing, product archiving and restoration, audit trail reporting, and user management. With features like two-level security, password reset, and a modern visual interface, the system improves efficiency, saves time, and enhances the overall customer–employee experience at Brewed Specialty Coffee.',
+          tags: ['Web Developer', 'HTML5', 'CSS3', 'JavaScript', 'PHP', 'JQuery', 'AJAX', 'XAMMP', 'MySQL', 'PHPMyAdmin', 'Bootstrap'],
+          video: 'src/videos/brewed.webp',
+          videoUrl: 'src/videos/brewed.mp4',
+          url: 'https://github.com/carl2525/brewed-specialty-coffe'
+        },
+        'maldicion-notebook': {
+          title: 'Maldicion Notebook',
+          category: 'Creative Video',
+          description: 'A creative project video made as a college prerequisite, showcasing visual storytelling, editing techniques, and a horror narrative.',
+          tags: ['Premiere Pro', 'Sounds', 'Creative Direction'],
+          video: 'src/images/Maldicion Notebook.webp',
+          videoUrl: 'src/videos/Group 2 - Maldicion Notebook Final.mp4',
+          url: 'https://drive.google.com/file/d/16YZUUQWd3IAMgX_CeaRgOQRLdRZhN8ZJ/view?usp=sharing'
+        },
+        'rtu-vlog': {
+          title: 'RTU Vlog Finale',
+          category: 'Vlog / Lifestyle',
+          description: 'A prerequisite in college which tells the RTU vlog series, meticulously edited to capture the emotional and vibrant highlights of university life.',
+          tags: ['Premiere Pro', 'Video Editing', 'Color Grading', 'Storytelling', 'Creative Direction'],
+          video: 'src/images/Rtu Vlog Finale.webp',
+          videoUrl: 'src/videos/RTU Vlog Finale.mp4',
+          url: 'https://drive.google.com/file/d/1L4bb6cKVMgEDapIsRxqHzftLn8jwYq2_/view?usp=drive_link'
+        },
+        'wordcrash': {
+          title: 'WordCrash Infomercial',
+          category: 'Infomercial',
+          description: 'A high-energy infomercial created to promote WordCrash Game, featuring dynamic transitions, clear messaging, and engaging visual elements.',
+          tags: ['Premiere Pro', 'Marketing', 'Video Production', 'Creative Direction'],
+          video: 'src/images/WordCrash Infomercial.webp',
+          videoUrl: 'src/videos/Infomercial Final WordCrash.mp4',
+          url: 'https://drive.google.com/file/d/1qZOl_1fT53UlzVYqnCqNCIwM9LqPj24F/view?usp=sharing'
+        }
+      };
+
+      function openProjectModal(projectId) {
+        const data = projectData[projectId];
+        if (!data) return;
+
+        const modal = document.getElementById('project-modal');
+        const overlay = document.getElementById('modal-overlay');
+        const content = document.getElementById('modal-content');
+        const title = document.getElementById('modal-title');
+        const badge = document.getElementById('modal-badge').querySelector('span');
+        const description = document.getElementById('modal-description');
+        const tagsContainer = document.getElementById('modal-tags');
+        const videoContainer = document.getElementById('modal-video-container');
+        const modalLink = document.getElementById('modal-link');
+        const modalLinkText = document.getElementById('modal-link-text');
+
+        title.textContent = data.title;
+        badge.textContent = data.category;
+        description.textContent = data.description;
+        modalLink.href = data.url;
+
+        // Update button text based on category
+        if (data.category.toLowerCase().includes('video') || data.category.toLowerCase().includes('vlog') || data.category.toLowerCase().includes('infomercial')) {
+          modalLinkText.textContent = 'Go To Video Portfolio';
+        } else {
+          modalLinkText.textContent = 'Go to Application';
+        }
+        
+        // Clear and add tags
+        tagsContainer.innerHTML = '';
+        data.tags.forEach(tag => {
+          const span = document.createElement('span');
+          span.className = 'px-3 py-1 rounded-lg bg-zinc-200/50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 text-xs border border-zinc-300/50 dark:border-zinc-700/50';
+          span.textContent = tag;
+          tagsContainer.appendChild(span);
+        });
+
+        // Set video player
+        if (data.videoUrl && (data.videoUrl.includes('youtube.com') || data.videoUrl.includes('youtu.be'))) {
+          let embedUrl = data.videoUrl.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/');
+          // Ensure it's a clean embed URL
+          if (embedUrl.includes('youtube.com/embed/')) {
+            const videoId = embedUrl.split('embed/')[1].split('&')[0].split('?')[0];
+            embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`;
+          }
+          videoContainer.innerHTML = `<iframe src="${embedUrl}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        } else if (data.videoUrl) {
+          videoContainer.innerHTML = `
+            <video controls autoplay class="w-full h-full object-contain bg-black">
+              <source src="${data.videoUrl}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          `;
+        } else {
+          videoContainer.innerHTML = `
+            <div class="relative w-full h-full group">
+              <img src="${data.video}" class="w-full h-full object-cover opacity-50" referrerPolicy="no-referrer">
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <i data-lucide="play-circle" class="w-20 h-20 text-orange-500 mb-4 animate-pulse"></i>
+                <p class="text-white font-bold text-lg tracking-wider uppercase">No Video Available</p>
+              </div>
+            </div>
+          `;
+        }
+
+        // Show modal with animation
+        modal.classList.remove('hidden');
+        overlay.classList.add('overlay-animate-in');
+        content.classList.add('modal-animate-in');
+        
+        document.body.style.overflow = 'hidden'; // Prevent scrolling
+        lucide.createIcons();
+      }
+
+      function closeProjectModal() {
+        const modal = document.getElementById('project-modal');
+        const overlay = document.getElementById('modal-overlay');
+        const content = document.getElementById('modal-content');
+        const videoContainer = document.getElementById('modal-video-container');
+
+        // Add closing animations
+        overlay.classList.remove('overlay-animate-in');
+        content.classList.remove('modal-animate-in');
+        overlay.classList.add('overlay-animate-out');
+        content.classList.add('modal-animate-out');
+
+        setTimeout(() => {
+          videoContainer.innerHTML = ''; // Stop video playback
+          modal.classList.add('hidden');
+          
+          // Cleanup animation classes
+          overlay.classList.remove('overlay-animate-out');
+          content.classList.remove('modal-animate-out');
+          
+          document.body.style.overflow = ''; // Restore scrolling
+        }, 300);
+      }
+
+      // Close modal on escape key
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeProjectModal();
+      });
+
+      // Theme Toggle Logic
+      const themeToggle = document.getElementById('theme-toggle');
+      const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+      const html = document.documentElement;
+
+      function toggleTheme() {
+        if (html.classList.contains('dark')) {
+          html.classList.remove('dark');
+          localStorage.setItem('theme', 'light');
+        } else {
+          html.classList.add('dark');
+          localStorage.setItem('theme', 'dark');
+        }
+        lucide.createIcons();
+      }
+
+      themeToggle.addEventListener('click', toggleTheme);
+      themeToggleMobile.addEventListener('click', toggleTheme);
+
+      // Check for saved theme or system preference
+      const savedTheme = localStorage.getItem('theme');
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+      if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+        html.classList.add('dark');
+      } else {
+        html.classList.remove('dark');
+      }
+      
+      // Re-initialize icons after theme check
+      lucide.createIcons();
+
+      // Hero Interactivity
+      const hero = document.getElementById('home');
+      const heroContent = document.getElementById('hero-content');
+      const blob1 = document.getElementById('hero-blob-1');
+      const blob2 = document.getElementById('hero-blob-2');
+      const spotlight = document.getElementById('hero-spotlight');
+      const typewriter = document.getElementById('typewriter');
+      const canvas = document.getElementById('hero-particles');
+
+      // Mouse Parallax, Spotlight, and Tilt
+      if (hero) {
+        hero.addEventListener('mousemove', (e) => {
+          const { clientX, clientY } = e;
+          const { innerWidth, innerHeight } = window;
+          const rect = hero.getBoundingClientRect();
+          const x = clientX - rect.left;
+          const y = clientY - rect.top;
+
+          // Spotlight
+          if (spotlight) {
+            spotlight.style.opacity = '1';
+            spotlight.style.setProperty('--x', `${x}px`);
+            spotlight.style.setProperty('--y', `${y}px`);
+          }
+          
+          // Blobs
+          if (blob1 && blob2) {
+            const xPos = (clientX / innerWidth - 0.5) * 60;
+            const yPos = (clientY / innerHeight - 0.5) * 60;
+            blob1.style.transform = `translate(${xPos}px, ${yPos}px)`;
+            blob2.style.transform = `translate(${-xPos}px, ${-yPos}px)`;
+          }
+
+          // Content Tilt
+          if (heroContent) {
+            const xRotation = (clientY / innerHeight - 0.5) * 10;
+            const yRotation = (clientX / innerWidth - 0.5) * -10;
+            heroContent.style.transform = `perspective(1000px) rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
+          }
+        });
+
+        hero.addEventListener('mouseleave', () => {
+          if (spotlight) spotlight.style.opacity = '0';
+          if (heroContent) heroContent.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+        });
+      }
+
+      // Particles System
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const particleCount = 50;
+
+        class Particle {
+          constructor() {
+            this.init();
+          }
+          init() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 1;
+            this.speedX = Math.random() * 1 - 0.5;
+            this.speedY = Math.random() * 1 - 0.5;
+            this.color = document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
+          }
+          update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if (this.x > canvas.width) this.x = 0;
+            if (this.x < 0) this.x = canvas.width;
+            if (this.y > canvas.height) this.y = 0;
+            if (this.y < 0) this.y = canvas.height;
+          }
+          draw() {
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+
+        function resize() {
+          canvas.width = canvas.offsetWidth;
+          canvas.height = canvas.offsetHeight;
+          particles = [];
+          for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+          }
+        }
+
+        function animate() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          particles.forEach(p => {
+            p.update();
+            p.draw();
+          });
+          requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+        animate();
+      }
+
+      // Typewriter Effect
+      const words = ["Digital Experiences", "Modern Solutions", "Creative Designs", "Seamless Interfaces"];
+      let wordIndex = 0;
+      let charIndex = 0;
+      let isDeleting = false;
+      let typeSpeed = 100;
+
+      function type() {
+        if (!typewriter) return;
+        const currentWord = words[wordIndex];
+        
+        if (isDeleting) {
+          typewriter.textContent = currentWord.substring(0, charIndex - 1);
+          charIndex--;
+          typeSpeed = 50;
+        } else {
+          typewriter.textContent = currentWord.substring(0, charIndex + 1);
+          charIndex++;
+          typeSpeed = 100;
+        }
+
+        if (!isDeleting && charIndex === currentWord.length) {
+          isDeleting = true;
+          typeSpeed = 2000; // Pause at end
+        } else if (isDeleting && charIndex === 0) {
+          isDeleting = false;
+          wordIndex = (wordIndex + 1) % words.length;
+          typeSpeed = 500;
+        }
+
+        setTimeout(type, typeSpeed);
+      }
+
+      if (typewriter) {
+        type();
+      }
+
+      // Magnetic Buttons
+      const heroButtons = document.querySelectorAll('#home a');
+      heroButtons.forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+          const rect = btn.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+        });
+        btn.addEventListener('mouseleave', () => {
+          btn.style.transform = 'translate(0, 0)';
+        });
+      });
+
+      // Contact Form Handling
+      const contactForm = document.getElementById('contact-form');
+      if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          
+          const name = document.getElementById('contact-name').value;
+          const email = document.getElementById('contact-email').value;
+          const subject = document.getElementById('contact-subject').value;
+          const message = document.getElementById('contact-message').value;
+          
+          const body = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
+          const mailtoLink = `mailto:carl.gorobao2525@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+          
+          // Open mail client
+          window.location.href = mailtoLink;
+          
+          // Optional: Reset form after a short delay
+          setTimeout(() => {
+            contactForm.reset();
+          }, 1000);
+        });
+      }
+    </script>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  lucide.createIcons();
+</script>
+
+  </body>
+</html>
+
