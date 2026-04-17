@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -19,11 +19,6 @@
     <meta property="twitter:title" content="Carl Erwin Gorobao | Web Developer & Designer" />
     <meta property="twitter:description" content="A modern, responsive portfolio by Carl Erwin R. Gorobao, a BSIT graduate specializing in web development and digital design." />
     <meta property="twitter:image" content="src/images/CarlErwinGorobao.webp" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./src/index.css">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -122,8 +117,11 @@
         }
       }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+  lucide.createIcons();
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   </head>
   <body>
     <!-- Navigation -->
@@ -1047,13 +1045,14 @@
       themeToggle.addEventListener('click', toggleTheme);
       themeToggleMobile.addEventListener('click', toggleTheme);
 
-      // Check for saved theme (default to dark)
+      // Check for saved theme or system preference
       const savedTheme = localStorage.getItem('theme');
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-      if (savedTheme === 'light') {
-        html.classList.remove('dark');
-      } else {
+      if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
         html.classList.add('dark');
+      } else {
+        html.classList.remove('dark');
       }
       
       // Re-initialize icons after theme check
@@ -1344,10 +1343,11 @@
       });
     </script>
 
-    <script>
-      // Initialize Lucide icons
-      lucide.createIcons();
-    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  lucide.createIcons();
+</script>
+
   </body>
 </html>
 
