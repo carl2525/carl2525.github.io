@@ -218,11 +218,12 @@
     <section id="about" class="py-20 lg:py-32 bg-zinc-100/50 dark:bg-zinc-900/30">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid lg:grid-cols-2 gap-16 items-center">
-          <div class="relative">
-            <div class="aspect-square rounded-3xl overflow-hidden glass p-4">
-              <img src="src/images/CarlErwinGorobao.webp" alt="Carl Erwin Gorobao" class="w-full h-full object-cover rounded-2xl grayscale-[25%] hover:grayscale-0 transition-all duration-500" referrerPolicy="no-referrer">
+          <div class="relative group" id="about-img-group">
+            <div id="about-img-container" class="aspect-square rounded-3xl overflow-hidden glass p-4 transition-transform duration-300 ease-out origin-center">
+              <div id="about-img-glow" class="absolute inset-0 bg-gradient-to-tr from-orange-600/20 to-amber-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl -z-10"></div>
+              <img id="about-img" src="src/images/CarlErwinGorobao.webp" alt="Carl Erwin Gorobao" class="w-full h-full object-cover rounded-2xl grayscale-[25%] group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-110" referrerPolicy="no-referrer">
             </div>
-            <div class="absolute -bottom-6 -right-6 glass p-6 rounded-2xl hidden md:block">
+            <div class="absolute -bottom-6 -right-6 glass p-6 rounded-2xl hidden md:block group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform duration-500">
               <div class="text-3xl font-bold text-orange-500 dark:text-orange-400">BSIT</div>
               <div class="text-sm text-zinc-500 dark:text-zinc-400">Graduate @ RTU</div>
             </div>
@@ -268,92 +269,104 @@
 
         <div class="space-y-8">
           <!-- Experience 1 -->
-          <div class="glass p-8 rounded-3xl relative overflow-hidden group">
-            <div class="absolute top-0 right-0 w-64 h-64 bg-orange-600/5 dark:bg-orange-600/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2"></div>
-            <div class="relative z-10">
-              <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                <div>
-                  <h3 class="text-2xl font-bold text-zinc-900 dark:text-white group-hover:text-orange-500 dark:group-hover:text-orange-400 transition-colors">Web Designer</h3>
-                  <div class="text-orange-600 dark:text-orange-400 font-medium">411BPO / 411Locals</div>
+          <div class="experience-card opacity-0 translate-y-10 transition-all duration-1000 ease-out group">
+            <div class="glass p-8 rounded-3xl relative overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-orange-500/10 border-t border-orange-500/20">
+              <div class="absolute top-0 right-0 w-64 h-64 bg-orange-600/5 dark:bg-orange-600/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 group-hover:bg-orange-600/10 transition-colors"></div>
+              
+              <div class="relative z-10">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                  <div>
+                    <h3 class="text-2xl font-bold text-zinc-900 dark:text-white group-hover:text-orange-500 dark:group-hover:text-orange-400 transition-colors">Web Designer</h3>
+                    <div class="text-orange-600 dark:text-orange-400 font-bold text-lg">411BPO / 411Locals</div>
+                  </div>
+                  <div class="px-4 py-1.5 rounded-full glass text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+                    Feb 2024 - Feb 2026
+                  </div>
                 </div>
-                <div class="px-4 py-1.5 rounded-full glass text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
-                  Feb 2024 - Feb 2026
-                </div>
+
+                <ul class="space-y-4 text-zinc-600 dark:text-zinc-400 leading-relaxed text-sm lg:text-base">
+                  <li class="flex gap-3">
+                    <span class="text-orange-500 shrink-0 mt-1.5"><i data-lucide="check-circle-2" class="w-4 h-4"></i></span>
+                    <span>Design and maintaining website using WordPress CMS and Divi Builder plugin to customize and modify content.</span>
+                  </li>
+                  <li class="flex gap-3">
+                    <span class="text-orange-500 shrink-0 mt-1.5"><i data-lucide="check-circle-2" class="w-4 h-4"></i></span>
+                    <span>Implement basic SEO strategies and integrate efficient techniques on images/data to ensure minimal loading speeds.</span>
+                  </li>
+                  <li class="flex gap-3">
+                    <span class="text-orange-500 shrink-0 mt-1.5"><i data-lucide="check-circle-2" class="w-4 h-4"></i></span>
+                    <span>Creating SEO friendly websites or designs for clients and implementing efficient methods to achieve highest KPI.</span>
+                  </li>
+                </ul>
               </div>
-              <ul class="space-y-3 text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                <li class="flex gap-3">
-                  <span class="text-orange-500 dark:text-orange-400 mt-1.5">•</span>
-                  <span>Design and Maintaining Website Using Wordpress CMS and Utilized Divi Builder Plugin to Customize and modify every content for the Website</span>
-                </li>
-                <li class="flex gap-3">
-                  <span class="text-orange-500 dark:text-orange-400 mt-1.5">•</span>
-                  <span>Implement Basic SEO Strategies and Integrates Efficient Techniques on Images/Data to ensure minimal loading speeds of the website</span>
-                </li>
-                <li class="flex gap-3">
-                  <span class="text-orange-500 dark:text-orange-400 mt-1.5">•</span>
-                  <span>Creating SEO Friendly Websites or Design for the Client of the company and Implementing Efficient method to achieve highest KPI as possible.</span>
-                </li>
-              </ul>
             </div>
           </div>
 
           <!-- Experience 2 -->
-          <div class="glass p-8 rounded-3xl relative overflow-hidden group">
-            <div class="absolute top-0 right-0 w-64 h-64 bg-orange-600/5 dark:bg-orange-600/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2"></div>
-            <div class="relative z-10">
-              <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                <div>
-                  <h3 class="text-2xl font-bold text-zinc-900 dark:text-white group-hover:text-orange-500 dark:group-hover:text-orange-400 transition-colors">Web Developer Intern</h3>
-                  <div class="text-orange-600 dark:text-orange-400 font-medium">RTU Boni Campus</div>
+          <div class="experience-card opacity-0 translate-y-10 transition-all duration-1000 ease-out group">
+            <div class="glass p-8 rounded-3xl relative overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-orange-500/10 border-t border-orange-500/20">
+              <div class="absolute top-0 right-0 w-64 h-64 bg-orange-600/5 dark:bg-orange-600/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 group-hover:bg-orange-600/10 transition-colors"></div>
+              
+              <div class="relative z-10">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                  <div>
+                    <h3 class="text-2xl font-bold text-zinc-900 dark:text-white group-hover:text-orange-500 dark:group-hover:text-orange-400 transition-colors">Web Developer Intern</h3>
+                    <div class="text-orange-600 dark:text-orange-400 font-bold text-lg">RTU Boni Campus</div>
+                  </div>
+                  <div class="px-4 py-1.5 rounded-full glass text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+                    Sept 2022 - Dec 2022
+                  </div>
                 </div>
-                <div class="px-4 py-1.5 rounded-full glass text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
-                  Sept 2022 - Dec 2022
-                </div>
+
+                <ul class="space-y-4 text-zinc-600 dark:text-zinc-400 leading-relaxed text-sm lg:text-base">
+                  <li class="flex gap-3">
+                    <span class="text-orange-500 shrink-0 mt-1.5"><i data-lucide="check-circle-2" class="w-4 h-4"></i></span>
+                    <span>Lead Developer and Project leader of RTU: Web Based Document Management System.</span>
+                  </li>
+                  <li class="flex gap-3">
+                    <span class="text-orange-500 shrink-0 mt-1.5"><i data-lucide="check-circle-2" class="w-4 h-4"></i></span>
+                    <span>Rendered 300 hours, created UI/UX, and applied full-stack development using Laravel, PHP, and MySQL.</span>
+                  </li>
+                  <li class="flex gap-3">
+                    <span class="text-orange-500 shrink-0 mt-1.5"><i data-lucide="check-circle-2" class="w-4 h-4"></i></span>
+                    <span>Utilized HTML5, CSS3, JavaScript, jQuery, Ajax, and Bootstrap, published on 000webhost.</span>
+                  </li>
+                </ul>
               </div>
-              <ul class="space-y-3 text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                <li class="flex gap-3">
-                  <span class="text-orange-500 dark:text-orange-400 mt-1.5">•</span>
-                  <span>Lead Developer and Project leader of RTU: Web Based Document Management System</span>
-                </li>
-                <li class="flex gap-3">
-                  <span class="text-orange-500 dark:text-orange-400 mt-1.5">•</span>
-                  <span>Rendered a total of 300 hours, created UI/UX of the system and Applied Framework, Hosting, Front and Back End development in creating the system.</span>
-                </li>
-                <li class="flex gap-3">
-                  <span class="text-orange-500 dark:text-orange-400 mt-1.5">•</span>
-                  <span>Uses Laravel Framework, Front-End Design of HTML5, CSS3, JavaScript, jQuery, Ajax, Bootstrap. Back-End of PHP, JavaScript. Database of PhpMyAdmin, MySQL. And published on 000webhost</span>
-                </li>
-              </ul>
             </div>
           </div>
 
           <!-- Experience 3 -->
-          <div class="glass p-8 rounded-3xl relative overflow-hidden group">
-            <div class="absolute top-0 right-0 w-64 h-64 bg-orange-600/5 dark:bg-orange-600/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2"></div>
-            <div class="relative z-10">
-              <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                <div>
-                  <h3 class="text-2xl font-bold text-zinc-900 dark:text-white group-hover:text-orange-500 dark:group-hover:text-orange-400 transition-colors">Data Encoder Intern</h3>
-                  <div class="text-orange-600 dark:text-orange-400 font-medium">Margarito A. Duavit Memorial Hospital</div>
+          <div class="experience-card opacity-0 translate-y-10 transition-all duration-1000 ease-out group">
+            <div class="glass p-8 rounded-3xl relative overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-orange-500/10 border-t border-orange-500/20">
+              <div class="absolute top-0 right-0 w-64 h-64 bg-orange-600/5 dark:bg-orange-600/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 group-hover:bg-orange-600/10 transition-colors"></div>
+              
+              <div class="relative z-10">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                  <div>
+                    <h3 class="text-2xl font-bold text-zinc-900 dark:text-white group-hover:text-orange-500 dark:group-hover:text-orange-400 transition-colors">Data Encoder Intern</h3>
+                    <div class="text-orange-600 dark:text-orange-400 font-bold text-lg">Margarito A. Duavit Memorial Hospital</div>
+                  </div>
+                  <div class="px-4 py-1.5 rounded-full glass text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+                    Dec 2018 - Mar 2019
+                  </div>
                 </div>
-                <div class="px-4 py-1.5 rounded-full glass text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
-                  Dec 2018 - Mar 2019
-                </div>
+
+                <ul class="space-y-4 text-zinc-600 dark:text-zinc-400 leading-relaxed text-sm lg:text-base">
+                  <li class="flex gap-3">
+                    <span class="text-orange-500 shrink-0 mt-1.5"><i data-lucide="check-circle-2" class="w-4 h-4"></i></span>
+                    <span>80 Hours of Work Immersion in the Philhealth Section as Data Encoder.</span>
+                  </li>
+                  <li class="flex gap-3">
+                    <span class="text-orange-500 shrink-0 mt-1.5"><i data-lucide="check-circle-2" class="w-4 h-4"></i></span>
+                    <span>Maintained and organized numerous Philhealth files, tracking data manually and automatically.</span>
+                  </li>
+                  <li class="flex gap-3">
+                    <span class="text-orange-500 shrink-0 mt-1.5"><i data-lucide="check-circle-2" class="w-4 h-4"></i></span>
+                    <span>Encoding data using Microsoft Excel and Word.</span>
+                  </li>
+                </ul>
               </div>
-              <ul class="space-y-3 text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                <li class="flex gap-3">
-                  <span class="text-orange-500 dark:text-orange-400 mt-1.5">•</span>
-                  <span>80 Hours of Work Immersion in the Philhealth Section as Data Encoder</span>
-                </li>
-                <li class="flex gap-3">
-                  <span class="text-orange-500 dark:text-orange-400 mt-1.5">•</span>
-                  <span>Maintained and Organized Numerous Philhealth Files, and Manually and Automatically Track All the Data Files</span>
-                </li>
-                 <li class="flex gap-3">
-                  <span class="text-orange-500 dark:text-orange-400 mt-1.5">•</span>
-                  <span>Encoding Data to the Microsoft Excel, and Word</span>
-                </li>
-              </ul>
             </div>
           </div>
         </div>
@@ -787,6 +800,11 @@
       </div>
     </footer>
 
+    <!-- Scroll to Top Button -->
+    <button id="scroll-top" class="fixed bottom-6 right-6 p-4 rounded-2xl glass text-orange-600 dark:text-orange-400 opacity-0 invisible translate-y-10 transition-all duration-500 hover:bg-orange-600 hover:text-white dark:hover:bg-orange-600 dark:hover:text-white z-50 shadow-lg shadow-orange-600/20 group">
+      <i data-lucide="chevron-up" class="w-6 h-6 group-hover:-translate-y-1 transition-transform"></i>
+    </button>
+
     <script>
       // Set current year
       document.getElementById('year').textContent = new Date().getFullYear();
@@ -1218,6 +1236,111 @@
           }, 1000);
         });
       }
+
+      // About Image Interactivity
+      const aboutGroup = document.getElementById('about-img-group');
+      const aboutContainer = document.getElementById('about-img-container');
+      const aboutGlow = document.getElementById('about-img-glow');
+
+      if (aboutGroup && aboutContainer) {
+        aboutGroup.addEventListener('mousemove', (e) => {
+          const rect = aboutGroup.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          
+          const xPercent = (x / rect.width - 0.5) * 2;
+          const yPercent = (y / rect.height - 0.5) * 2;
+          
+          const rotateX = yPercent * -10;
+          const rotateY = xPercent * 10;
+          
+          aboutContainer.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+          
+          if (aboutGlow) {
+            aboutGlow.style.left = `${x - rect.width/2}px`;
+            aboutGlow.style.top = `${y - rect.height/2}px`;
+          }
+        });
+
+        aboutGroup.addEventListener('mouseleave', () => {
+          aboutContainer.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        });
+      }
+
+      // Experience Scroll Reveal
+      const experienceCards = document.querySelectorAll('.experience-card');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.remove('opacity-0', 'translate-y-10');
+            entry.target.classList.add('opacity-100', 'translate-y-0');
+          }
+        });
+      }, { threshold: 0.1 });
+
+      experienceCards.forEach(card => {
+        observer.observe(card);
+        
+        const innerCard = card.querySelector('.glass');
+        const glow = card.querySelector('.absolute.rounded-full.blur-\\[80px\\]');
+        
+        if (innerCard) {
+          card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const xPercent = (x / rect.width - 0.5) * 2;
+            const yPercent = (y / rect.height - 0.5) * 2;
+            
+            const rotateX = yPercent * -5;
+            const rotateY = xPercent * 5;
+            
+            innerCard.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+            
+            if (glow) {
+              const glowX = (x / rect.width) * 100;
+              const glowY = (y / rect.height) * 100;
+              glow.style.left = `${x - 128}px`;
+              glow.style.top = `${y - 128}px`;
+              glow.style.right = 'auto'; // Disable the default top-right positioning
+              glow.style.transform = 'translate(0, 0)';
+              glow.style.opacity = '0.4';
+            }
+          });
+          
+          card.addEventListener('mouseleave', () => {
+            innerCard.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)';
+            if (glow) {
+              glow.style.left = '';
+              glow.style.top = '';
+              glow.style.right = '';
+              glow.style.transform = '';
+              glow.style.opacity = '';
+            }
+          });
+        }
+      });
+
+      // Scroll to Top Logic
+      const scrollTopBtn = document.getElementById('scroll-top');
+      
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 500) {
+          scrollTopBtn.classList.remove('opacity-0', 'invisible', 'translate-y-10');
+          scrollTopBtn.classList.add('opacity-100', 'visible', 'translate-y-0');
+        } else {
+          scrollTopBtn.classList.add('opacity-0', 'invisible', 'translate-y-10');
+          scrollTopBtn.classList.remove('opacity-100', 'visible', 'translate-y-0');
+        }
+      });
+
+      scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
     </script>
 
     <script src="https://unpkg.com/lucide@latest"></script>
