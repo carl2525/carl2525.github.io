@@ -57,67 +57,7 @@ const projectData = {
   }
 };
 
-// Global State
-const html = document.documentElement;
-const yearSpan = document.getElementById('year');
-const menuToggle = document.getElementById('menu-toggle');
-const mobileMenu = document.getElementById('mobile-menu');
-const sections = document.querySelectorAll('section');
-const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
-const hero = document.getElementById('home');
-const heroContent = document.getElementById('hero-content');
-const blob1 = document.getElementById('hero-blob-1');
-const blob2 = document.getElementById('hero-blob-2');
-const spotlight = document.getElementById('hero-spotlight');
-const typewriter = document.getElementById('typewriter');
-const canvas = document.getElementById('hero-particles');
-
-// Mobile Menu Toggle
-function updateMenuIcon(isOpen) {
-  if (!menuToggle) return;
-  menuToggle.innerHTML = `<i data-lucide="${isOpen ? 'x' : 'menu'}" id="menu-icon"></i>`;
-  lucide.createIcons();
-}
-
-if (menuToggle) {
-  menuToggle.addEventListener('click', () => {
-    mobileMenu.classList.toggle('hidden');
-    const isOpen = !mobileMenu.classList.contains('hidden');
-    updateMenuIcon(isOpen);
-    menuToggle.setAttribute('aria-expanded', isOpen);
-  });
-}
-
-// Close mobile menu on link click
-document.querySelectorAll('.mobile-nav-link').forEach(link => {
-  link.addEventListener('click', () => {
-    mobileMenu.classList.add('hidden');
-    updateMenuIcon(false);
-  });
-});
-
-// Scroll Spy
-window.addEventListener('scroll', () => {
-  let current = '';
-  sections.forEach(section => {
-    const sectionTop = section.offsetTop;
-    const sectionHeight = section.clientHeight;
-    if (pageYOffset >= sectionTop - 200) {
-      current = section.getAttribute('id');
-    }
-  });
-
-  navLinks.forEach(link => {
-    link.classList.remove('text-orange-500', 'dark:text-orange-400');
-    link.classList.add('text-zinc-500', 'dark:text-zinc-400');
-    if (link.getAttribute('data-section') === current) {
-      link.classList.remove('text-zinc-500', 'dark:text-zinc-400');
-      link.classList.add('text-orange-500', 'dark:text-orange-400');
-    }
-  });
-});
-
-// Project Modal Functions
+// --- Modal Helper Functions ---
 function openProjectModal(projectId) {
   const data = projectData[projectId];
   if (!data) return;
@@ -132,6 +72,8 @@ function openProjectModal(projectId) {
   const videoContainer = document.getElementById('modal-video-container');
   const modalLink = document.getElementById('modal-link');
   const modalLinkText = document.getElementById('modal-link-text');
+
+  if (!modal || !title) return;
 
   title.textContent = data.title;
   badge.textContent = data.category;
@@ -171,7 +113,7 @@ function openProjectModal(projectId) {
       <div class="relative w-full h-full group">
         <img src="${data.video}" class="w-full h-full object-cover opacity-50" referrerPolicy="no-referrer">
         <div class="absolute inset-0 flex flex-col items-center justify-center">
-          <i data-lucide="play-circle" class="w-20 h-20 text-orange-500 mb-4 animate-pulse"></i>
+          <i data-lucide="play-circle" class="w-20 h-20 text-primary-500 mb-4 animate-pulse"></i>
           <p class="text-white font-bold text-lg tracking-wider uppercase">No Video Available</p>
         </div>
       </div>
@@ -182,7 +124,7 @@ function openProjectModal(projectId) {
   overlay.classList.add('overlay-animate-in');
   content.classList.add('modal-animate-in');
   document.body.style.overflow = 'hidden';
-  lucide.createIcons();
+  if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
 function closeProjectModal() {
@@ -190,6 +132,8 @@ function closeProjectModal() {
   const overlay = document.getElementById('modal-overlay');
   const content = document.getElementById('modal-content');
   const videoContainer = document.getElementById('modal-video-container');
+
+  if (!modal || !overlay) return;
 
   overlay.classList.remove('overlay-animate-in');
   content.classList.remove('modal-animate-in');
@@ -205,125 +149,112 @@ function closeProjectModal() {
   }, 300);
 }
 
-// Particle System
-let particles = [];
-function resize() {
-  if (!canvas) return;
-  canvas.width = canvas.offsetWidth;
-  canvas.height = canvas.offsetHeight;
-  particles = [];
-  const particleCount = window.innerWidth < 768 ? 20 : 50;
-  for (let i = 0; i < particleCount; i++) {
-    particles.push(new Particle());
-  }
-}
-
-class Particle {
-  constructor() {
-    this.init();
-  }
-  init() {
-    this.x = Math.random() * canvas.width;
-    this.y = Math.random() * canvas.height;
-    this.size = Math.random() * 2 + 1;
-    this.speedX = Math.random() * 1 - 0.5;
-    this.speedY = Math.random() * 1 - 0.5;
-    this.color = html.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
-  }
-  update() {
-    this.x += this.speedX;
-    this.y += this.speedY;
-    if (this.x > canvas.width) this.x = 0;
-    if (this.x < 0) this.x = canvas.width;
-    if (this.y > canvas.height) this.y = 0;
-    if (this.y < 0) this.y = canvas.height;
-  }
-  draw(ctx) {
-    ctx.fillStyle = this.color;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fill();
-  }
-}
-
-function animate() {
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  particles.forEach(p => {
-    p.update();
-    p.draw(ctx);
-  });
-  requestAnimationFrame(animate);
-}
-
-// Typewriter
-const words_type = ["Digital Experiences", "Modern Solutions", "Creative Designs", "Seamless Interfaces"];
-let wordIndex = 0;
-let charIndex = 0;
-let isDeleting = false;
-let typeSpeed = 100;
-
-function type() {
-  if (!typewriter) return;
-  const currentWord = words_type[wordIndex];
-  if (isDeleting) {
-    typewriter.textContent = currentWord.substring(0, charIndex - 1);
-    charIndex--;
-    typeSpeed = 50;
-  } else {
-    typewriter.textContent = currentWord.substring(0, charIndex + 1);
-    charIndex++;
-    typeSpeed = 100;
-  }
-  if (!isDeleting && charIndex === currentWord.length) {
-    isDeleting = true;
-    typeSpeed = 2000;
-  } else if (isDeleting && charIndex === 0) {
-    isDeleting = false;
-    wordIndex = (wordIndex + 1) % words_type.length;
-    typeSpeed = 500;
-  }
-  setTimeout(type, typeSpeed);
-}
-
-// Theme
-function toggleTheme() {
-  if (html.classList.contains('dark')) {
-    html.classList.remove('dark');
-    localStorage.setItem('theme', 'light');
-  } else {
-    html.classList.add('dark');
-    localStorage.setItem('theme', 'dark');
-  }
-  lucide.createIcons();
-}
-
 // Global Exports
 window.openProjectModal = openProjectModal;
 window.closeProjectModal = closeProjectModal;
 
-// Initializations
+// --- Main Application Lifecycle ---
 document.addEventListener('DOMContentLoaded', () => {
-  lucide.createIcons();
+  const html = document.documentElement;
+  const yearSpan = document.getElementById('year');
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const sections = document.querySelectorAll('section');
+  const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
+  const hero = document.getElementById('home');
+  const heroContent = document.getElementById('hero-content');
+  const blob1 = document.getElementById('hero-blob-1');
+  const blob2 = document.getElementById('hero-blob-2');
+  const spotlight = document.getElementById('hero-spotlight');
+  const typewriter = document.getElementById('typewriter');
+  const canvas = document.getElementById('hero-particles');
+
+  // 1. Initial Icon Render
+  if (typeof lucide !== 'undefined') lucide.createIcons();
   
+  // 2. Year Update
   if (yearSpan) yearSpan.textContent = new Date().getFullYear();
-  if (typewriter) type();
 
-  // Saved Theme
-  if (localStorage.getItem('theme') === 'light') html.classList.remove('dark');
-  else html.classList.add('dark');
-  lucide.createIcons();
+  // 4. Mobile Menu Logic
+  if (menuToggle && mobileMenu) {
+    const updateMenuIcon = (isOpen) => {
+      menuToggle.innerHTML = `<i data-lucide="${isOpen ? 'x' : 'menu'}" id="menu-icon"></i>`;
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    };
 
-  // Event Listeners
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+      const isOpen = !mobileMenu.classList.contains('hidden');
+      updateMenuIcon(isOpen);
+      menuToggle.setAttribute('aria-expanded', isOpen);
+    });
+
+    document.querySelectorAll('.mobile-nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        updateMenuIcon(false);
+      });
+    });
+  }
+
+  // 5. Scroll Spy
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop;
+      if (window.pageYOffset >= sectionTop - 200) {
+        current = section.getAttribute('id');
+      }
+    });
+
+    navLinks.forEach(link => {
+      link.classList.remove('text-primary-500', 'dark:text-primary-400');
+      link.classList.add('text-zinc-500', 'dark:text-zinc-400');
+      if (link.getAttribute('data-section') === current) {
+        link.classList.remove('text-zinc-500', 'dark:text-zinc-400');
+        link.classList.add('text-primary-500', 'dark:text-primary-400');
+      }
+    });
+  });
+
+  // 6. Theme Toggle Listeners
   const themeToggle = document.getElementById('theme-toggle');
   const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+
+  const toggleTheme = () => {
+    const root = document.documentElement;
+    const isDark = root.classList.contains('dark');
+    
+    if (isDark) {
+      root.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    } else {
+      root.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    }
+
+    // Refresh Lucide icons
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+    
+    // Animate the toggle buttons
+    [themeToggle, themeToggleMobile].forEach(btn => {
+      if (btn) {
+        btn.classList.add('scale-110', 'rotate-12');
+        setTimeout(() => btn.classList.remove('scale-110', 'rotate-12'), 200);
+      }
+    });
+  };
+
   if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
   if (themeToggleMobile) themeToggleMobile.addEventListener('click', toggleTheme);
   
-  window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeProjectModal(); });
+  window.addEventListener('keydown', (e) => { 
+    if (e.key === 'Escape') closeProjectModal(); 
+  });
 
-  // Hero Parallax
+  // 7. Hero Visual Effects
   if (hero) {
     hero.addEventListener('mousemove', (e) => {
       const { clientX, clientY } = e;
@@ -353,14 +284,96 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Particles
-  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && canvas) {
-    resize();
-    animate();
-    window.addEventListener('resize', resize);
+  // 8. Particles Engine
+  let particles = [];
+  class Particle {
+    constructor() {
+      this.init();
+    }
+    init() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 2 + 1;
+      this.speedX = Math.random() * 1 - 0.5;
+      this.speedY = Math.random() * 1 - 0.5;
+      this.color = html.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      if (this.x > canvas.width) this.x = 0;
+      if (this.x < 0) this.x = canvas.width;
+      if (this.y > canvas.height) this.y = 0;
+      if (this.y < 0) this.y = canvas.height;
+    }
+    draw(ctx) {
+      ctx.fillStyle = this.color;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }
 
-  // Experience Cards
+  function resizeParticles() {
+    if (!canvas) return;
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    particles = [];
+    const particleCount = window.innerWidth < 768 ? 20 : 50;
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new Particle());
+    }
+  }
+
+  function animateParticles() {
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.update();
+      p.draw(ctx);
+    });
+    requestAnimationFrame(animateParticles);
+  }
+
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && canvas) {
+    resizeParticles();
+    animateParticles();
+    window.addEventListener('resize', resizeParticles);
+  }
+
+  // 9. Typewriter Effect
+  const words_type = ["Digital Experiences", "Modern Solutions", "Creative Designs", "Smooth Interfaces"];
+  let wordIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+  let typeSpeed = 100;
+
+  function runTypewriter() {
+    if (!typewriter) return;
+    const currentWord = words_type[wordIndex];
+    if (isDeleting) {
+      typewriter.textContent = currentWord.substring(0, charIndex - 1);
+      charIndex--;
+      typeSpeed = 50;
+    } else {
+      typewriter.textContent = currentWord.substring(0, charIndex + 1);
+      charIndex++;
+      typeSpeed = 100;
+    }
+    if (!isDeleting && charIndex === currentWord.length) {
+      isDeleting = true;
+      typeSpeed = 2000;
+    } else if (isDeleting && charIndex === 0) {
+      isDeleting = false;
+      wordIndex = (wordIndex + 1) % words_type.length;
+      typeSpeed = 500;
+    }
+    setTimeout(runTypewriter, typeSpeed);
+  }
+  if (typewriter) runTypewriter();
+
+  // 10. Reveal Animations
   const experienceCards = document.querySelectorAll('.experience-card');
   const expObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -394,25 +407,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Scroll to Top
+  // 11. Scroll to Top
   const scrollTopBtn = document.getElementById('scroll-top');
-  window.addEventListener('scroll', () => {
-    if (window.pageYOffset > 500) scrollTopBtn.classList.remove('opacity-0', 'invisible', 'translate-y-10'), scrollTopBtn.classList.add('opacity-100', 'visible', 'translate-y-0');
-    else scrollTopBtn.classList.add('opacity-0', 'invisible', 'translate-y-10'), scrollTopBtn.classList.remove('opacity-100', 'visible', 'translate-y-0');
-  });
-  scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-
-  // Contact Form
-  const contactForm = document.getElementById('contact-form');
-  if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const body = `Name: ${document.getElementById('contact-name').value}\nEmail: ${document.getElementById('contact-email').value}\n\nMessage:\n${document.getElementById('contact-message').value}`;
-      window.location.href = `mailto:carl.gorobao2525@gmail.com?subject=${encodeURIComponent(document.getElementById('contact-subject').value)}&body=${encodeURIComponent(body)}`;
+  if (scrollTopBtn) {
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 500) {
+        scrollTopBtn.classList.remove('opacity-0', 'invisible', 'translate-y-10');
+        scrollTopBtn.classList.add('opacity-100', 'visible', 'translate-y-0');
+      } else {
+        scrollTopBtn.classList.add('opacity-0', 'invisible', 'translate-y-10');
+        scrollTopBtn.classList.remove('opacity-100', 'visible', 'translate-y-0');
+      }
     });
+    scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
   }
 
-  // About Image
+  // 12. About Image Tilt
   const aboutGroup = document.getElementById('about-img-group');
   const aboutContainer = document.getElementById('about-img-container');
   const aboutGlow = document.getElementById('about-img-glow');
@@ -422,8 +432,34 @@ document.addEventListener('DOMContentLoaded', () => {
       const x = (e.clientX - rect.left) / rect.width - 0.5;
       const y = (e.clientY - rect.top) / rect.height - 0.5;
       aboutContainer.style.transform = `perspective(1000px) rotateX(${y * -20}deg) rotateY(${x * 20}deg) scale3d(1.02, 1.02, 1.02)`;
-      if (aboutGlow) { aboutGlow.style.left = `${(e.clientX - rect.left) - rect.width/2}px`, aboutGlow.style.top = `${(e.clientY - rect.top) - rect.height/2}px`; }
+      if (aboutGlow) { 
+        aboutGlow.style.left = `${(e.clientX - rect.left) - rect.width/2}px`;
+        aboutGlow.style.top = `${(e.clientY - rect.top) - rect.height/2}px`; 
+      }
     });
     aboutGroup.addEventListener('mouseleave', () => aboutContainer.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)');
+  }
+
+  // 13. Contact Form Submission (Mailto)
+  const contactForm = document.getElementById('contact-form');
+  if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('contact-name').value;
+      const email = document.getElementById('contact-email').value;
+      const subject = document.getElementById('contact-subject').value;
+      const message = document.getElementById('contact-message').value;
+      
+      const recipient = 'carl.gorobao2525@gmail.com';
+      const body = `Hello Carl,\n\nYou have a new message from your portfolio contact form:\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
+      
+      const mailtoLink = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      
+      window.location.href = mailtoLink;
+      
+      // Optional: Feedback could be added here
+      alert('Opening your email client to send the message...');
+      contactForm.reset();
+    });
   }
 });
