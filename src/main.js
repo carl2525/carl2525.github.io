@@ -258,7 +258,7 @@ function animate() {
 }
 
 // Typewriter
-const words_type = ["Digital Experiences", "Modern Solutions", "Creative Designs", "Seamless Interfaces"];
+const words_type = ["Digital Experiences", "Modern Solutions", "Creative Designs", "Smooth Interfaces"];
 let wordIndex = 0;
 let charIndex = 0;
 let isDeleting = false;
