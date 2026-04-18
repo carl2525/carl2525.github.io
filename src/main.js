@@ -286,6 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 8. Particles Engine
   let particles = [];
+  let animationFrameId = null;
   class Particle {
     constructor() {
       this.init();
@@ -294,9 +295,9 @@ document.addEventListener('DOMContentLoaded', () => {
       this.x = Math.random() * canvas.width;
       this.y = Math.random() * canvas.height;
       this.size = Math.random() * 2 + 1;
-      this.speedX = Math.random() * 1 - 0.5;
-      this.speedY = Math.random() * 1 - 0.5;
-      this.color = html.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
+      this.speedX = Math.random() * 0.8 - 0.4;
+      this.speedY = Math.random() * 0.8 - 0.4;
+      this.color = html.classList.contains('dark') ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.03)';
     }
     update() {
       this.x += this.speedX;
@@ -319,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
     particles = [];
-    const particleCount = window.innerWidth < 768 ? 20 : 50;
+    const particleCount = window.innerWidth < 768 ? 15 : 40;
     for (let i = 0; i < particleCount; i++) {
       particles.push(new Particle());
     }
@@ -333,17 +334,31 @@ document.addEventListener('DOMContentLoaded', () => {
       p.update();
       p.draw(ctx);
     });
-    requestAnimationFrame(animateParticles);
+    animationFrameId = requestAnimationFrame(animateParticles);
   }
 
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && canvas) {
     resizeParticles();
-    animateParticles();
-    window.addEventListener('resize', resizeParticles);
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          if (!animationFrameId) animateParticles();
+        } else {
+          cancelAnimationFrame(animationFrameId);
+          animationFrameId = null;
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    observer.observe(canvas);
+    window.addEventListener('resize', () => {
+      resizeParticles();
+    }, { passive: true });
   }
 
   // 9. Typewriter Effect
-  const words_type = ["Digital Experiences", "Modern Solutions", "Creative Designs", "Smooth Interfaces"];
+  const words_type = ["Digital Experiences", "Modern Solutions", "Creative Designs", "Seamless Interfaces"];
   let wordIndex = 0;
   let charIndex = 0;
   let isDeleting = false;
