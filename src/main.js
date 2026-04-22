@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // 5. Scroll Spy
-  window.addEventListener('scroll', () => {
+  const handleScrollSpy = () => {
     let current = '';
     sections.forEach(section => {
       const sectionTop = section.offsetTop;
@@ -208,14 +208,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     navLinks.forEach(link => {
-      link.classList.remove('text-primary-500', 'dark:text-primary-400');
-      link.classList.add('text-zinc-500', 'dark:text-zinc-400');
+      // Clear all potential active/inactive classes
+      link.classList.remove('text-primary-500', 'dark:text-primary-400', 'bg-primary-500/10', 'text-zinc-500', 'text-zinc-600', 'dark:text-zinc-400');
+      
+      const isMobile = link.classList.contains('mobile-nav-link');
+      
       if (link.getAttribute('data-section') === current) {
-        link.classList.remove('text-zinc-500', 'dark:text-zinc-400');
         link.classList.add('text-primary-500', 'dark:text-primary-400');
+        if (isMobile) link.classList.add('bg-primary-500/10');
+      } else {
+        link.classList.add(isMobile ? 'text-zinc-600' : 'text-zinc-500', 'dark:text-zinc-400');
       }
     });
-  });
+  };
+
+  window.addEventListener('scroll', handleScrollSpy);
+  handleScrollSpy(); // Initial call to set active section on load
 
   // 6. Theme Toggle Listeners
   const themeToggle = document.getElementById('theme-toggle');
