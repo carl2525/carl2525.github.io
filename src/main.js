@@ -28,6 +28,42 @@ const projectData = {
     videoUrl: 'src/videos/brewed.mp4',
     url: 'https://github.com/carl2525/brewed-specialty-coffe'
   },
+  'financeflow': {
+    title: 'FinanceFlow Management App',
+    category: 'Web App',
+    description: 'FinanceFlow is an elegant, highly intuitive financial tracking dashboard that simplifies personal or business budgeting model tracking. It lets users log transactions, check visual analytical metrics of expenditures, set categorical budgets, and secure statements in real-time.',
+    tags: ['Lead Developer', 'Next.js', 'React', 'Chart.js', 'Tailwind CSS', 'Vercel'],
+    video: 'src/images/financeflow.png',
+    videoUrl: '',
+    url: 'https://financeflow-carl-management.vercel.app/'
+  },
+  'ce-apartment': {
+    title: 'C.E. Apartment System',
+    category: 'Management System',
+    description: 'C.E. Apartment System is a modern, responsive rental property administration platform. Built for ease and efficiency, it enables smooth tenant tracking, maintenance request lists, secure contract uploads, visual analytics on revenue streams, and automated scheduling controls.',
+    tags: ['Full Stack', 'React.js', 'Node.js', 'Express.js', 'MongoDB', 'Tailwind CSS'],
+    video: 'src/images/ce_apartment.png',
+    videoUrl: '',
+    url: 'https://ce-apartment.vercel.app/'
+  },
+  'pnp-retirement': {
+    title: 'PNP Retirement Calculator',
+    category: 'Web Tool',
+    description: 'The Philippine National Police (PNP) Retirement Benefits & Pension Calculator. This web-based mathematical emulator allows service staff to easily predict, aggregate, and calculate their potential pension packages, saving schedules, and lump-sum payouts based on service years and ranks.',
+    tags: ['Lead Programmer', 'HTML5', 'CSS3', 'JavaScript', 'Tailwind CSS', 'Alpine.js'],
+    video: 'src/images/pnp_retirement.png',
+    videoUrl: '',
+    url: 'https://pnp-retirement-calculator.vercel.app/'
+  },
+  'wtw-test': {
+    title: 'WTW Portfolio Demo',
+    category: 'WordPress Design',
+    description: 'A custom corporate project page and services listing crafted on a WordPress foundation. Built with performance optimization, clean responsive layouts, optimized layout shifting (CLS), and semantic styling to ensure maximum SEO scores and rich brand fidelity.',
+    tags: ['Web Designer', 'WordPress', 'SEO', 'Creative Design', 'HTML5', 'CSS3'],
+    video: 'src/images/wtw_portfolio.png',
+    videoUrl: '',
+    url: 'https://wtwtestgorobao.wordpress.com/'
+  },
   'maldicion-notebook': {
     title: 'Maldicion Notebook',
     category: 'Creative Video',
@@ -59,6 +95,38 @@ const projectData = {
 
 // --- Modal Helper Functions ---
 function openProjectModal(projectId) {
+  // Check if we are clicking on an inactive project slide in our center-active sliding track
+  const sliderTrack = document.getElementById('projects-slider-track');
+  if (sliderTrack) {
+    const articles = Array.from(sliderTrack.querySelectorAll('article'));
+    const isSliderProject = articles.some(art => art.getAttribute('data-project-id') === projectId);
+
+    if (isSliderProject) {
+      const activeArticle = articles[window.currentProjectIndex];
+      if (activeArticle && activeArticle.getAttribute('data-project-id') !== projectId) {
+        // Find the card instance closest to window.currentProjectIndex
+        let bestIdx = -1;
+        let minDiff = Infinity;
+        articles.forEach((art, sIdx) => {
+          if (art.getAttribute('data-project-id') === projectId) {
+            const diff = Math.abs(sIdx - window.currentProjectIndex);
+            if (diff < minDiff) {
+              minDiff = diff;
+              bestIdx = sIdx;
+            }
+          }
+        });
+        if (bestIdx !== -1) {
+          window.currentProjectIndex = bestIdx;
+          if (typeof window.updateSlider === 'function') {
+            window.updateSlider();
+          }
+        }
+        return;
+      }
+    }
+  }
+
   const data = projectData[projectId];
   if (!data) return;
 
@@ -110,11 +178,21 @@ function openProjectModal(projectId) {
     `;
   } else {
     videoContainer.innerHTML = `
-      <div class="relative w-full h-full group">
-        <img src="${data.video}" class="w-full h-full object-cover opacity-50" referrerPolicy="no-referrer">
-        <div class="absolute inset-0 flex flex-col items-center justify-center">
-          <i data-lucide="play-circle" class="w-20 h-20 text-primary-500 mb-4 animate-pulse"></i>
-          <p class="text-white font-bold text-lg tracking-wider uppercase">No Video Available</p>
+      <div class="relative w-full h-full min-h-[260px] sm:min-h-[320px] md:min-h-[380px] lg:min-h-[480px] lg:h-full group overflow-hidden bg-zinc-950 flex items-center justify-center">
+        <!-- Immersive glass-like blurred backdrop of the custom image -->
+        <img src="${data.video}" class="absolute inset-0 w-full h-full object-cover opacity-30 blur-2xl scale-110 pointer-events-none select-none" referrerPolicy="no-referrer">
+        <!-- Sharp foreground contained original image -->
+        <img src="${data.video}" class="relative z-10 max-w-[90%] max-h-[85%] lg:max-h-[90%] object-contain opacity-95 group-hover:scale-[1.02] transition-transform duration-700 rounded-lg shadow-2xl" referrerPolicy="no-referrer">
+        
+        <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent z-15"></div>
+        <div class="absolute bottom-6 left-6 flex items-center gap-3 z-25">
+          <div class="p-2.5 rounded-xl bg-primary-500/15 border border-primary-500/30 text-primary-500 shadow-lg backdrop-blur-md">
+            <i data-lucide="globe" class="w-5 h-5"></i>
+          </div>
+          <div class="text-left">
+            <p class="text-white font-bold text-sm tracking-wide drop-shadow-md">Live Website Instance</p>
+            <p class="text-zinc-300 text-xs drop-shadow-sm">Click 'Go to Application' to explore</p>
+          </div>
         </div>
       </div>
     `;
@@ -443,6 +521,212 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
     scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  }
+
+  // 11.5 Projects Slider (Carousel - Theater Centering Slideshow)
+  const sliderTrack = document.getElementById('projects-slider-track');
+  const prevBtn = document.getElementById('prev-project');
+  const nextBtn = document.getElementById('next-project');
+  
+  // Set global variables for modal interception and sliding behavior
+  window.currentProjectIndex = 0;
+
+  if (sliderTrack && prevBtn && nextBtn) {
+    const originalArticles = Array.from(sliderTrack.querySelectorAll('article'));
+    const originalCount = originalArticles.length;
+
+    if (originalCount > 0) {
+      // Style all articles optimally for mobile viewports, typography, and premium layout
+      originalArticles.forEach(article => {
+        article.classList.add('rounded-2xl', 'sm:rounded-3xl');
+        article.classList.remove('rounded-3xl');
+        
+        const bodyDiv = article.querySelector('.p-4, .p-5, .p-6, .p-8');
+        if (bodyDiv) {
+          bodyDiv.className = 'p-5 sm:p-6 md:p-8 w-full flex flex-col justify-center';
+        }
+
+        const heading = article.querySelector('h3');
+        if (heading) {
+          heading.className = 'text-[17px] sm:text-lg md:text-xl lg:text-2xl font-bold mb-2 sm:mb-3 text-zinc-900 dark:text-white group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors duration-300';
+        }
+
+        const para = article.querySelector('p');
+        if (para) {
+          para.className = 'text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 mb-3 sm:mb-5 line-clamp-2 leading-relaxed';
+        }
+
+        const flexWrapper = article.querySelector('.flex.flex-wrap');
+        if (flexWrapper) {
+          flexWrapper.className = 'flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-6';
+          flexWrapper.querySelectorAll('span').forEach(tag => {
+            tag.className = 'text-[10.5px] sm:text-xs font-medium text-zinc-500 dark:text-zinc-400';
+          });
+        }
+
+        const btn = article.querySelector('button');
+        if (btn) {
+          btn.className = 'flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-bold text-zinc-900 dark:text-white hover:text-primary-500 dark:hover:text-primary-400 transition-colors duration-300 cursor-pointer';
+          const icon = btn.querySelector('i');
+          if (icon) {
+            icon.setAttribute('class', 'w-4 h-4');
+          }
+        }
+      });
+
+      // Clear layout and append Pre-clones, Originals, and Post-clones dynamically
+      sliderTrack.innerHTML = '';
+
+      const preClones = originalArticles.map(art => art.cloneNode(true));
+      const postClones = originalArticles.map(art => art.cloneNode(true));
+
+      preClones.forEach(clone => sliderTrack.appendChild(clone));
+      originalArticles.forEach(art => sliderTrack.appendChild(art));
+      postClones.forEach(clone => sliderTrack.appendChild(clone));
+
+      // Centered on the first element of our mid/original set
+      window.currentProjectIndex = originalCount;
+    }
+
+    let isTransitioning = false;
+
+    const updateSlider = (options = {}) => {
+      const articles = sliderTrack.querySelectorAll('article');
+      const totalItems = articles.length;
+      if (totalItems === 0) return;
+
+      const viewport = sliderTrack.parentElement;
+      if (!viewport) return;
+
+      const containerWidth = viewport.offsetWidth;
+      const activeArticle = articles[window.currentProjectIndex];
+      if (!activeArticle) return;
+      const cardWidth = activeArticle.offsetWidth;
+
+      // Compute standard translateX to physically align the center of the active card with the center of the viewport
+      const articleOffsetLeft = activeArticle.offsetLeft;
+      const activeCardCenter = articleOffsetLeft + (cardWidth / 2);
+      const translateX = (containerWidth / 2) - activeCardCenter;
+
+      if (options.instant) {
+        sliderTrack.style.transition = 'none';
+      } else {
+        sliderTrack.style.transition = 'transform 550ms cubic-bezier(0.16, 1, 0.3, 1)';
+      }
+
+      // Apply seamless positioning translate
+      sliderTrack.style.transform = `translateX(${translateX}px)`;
+
+      // Apply immersive active scaling vs minimized auxiliary ones
+      articles.forEach((article, idx) => {
+        if (idx === window.currentProjectIndex) {
+          article.classList.add('scale-105', 'opacity-100', 'z-10', 'shadow-2xl', 'ring-1', 'ring-primary-500/20', 'dark:ring-primary-500/30');
+          article.classList.remove('scale-95', 'opacity-35', 'blur-[0.5px]', 'shadow-none', 'hover:opacity-75');
+        } else {
+          article.classList.add('scale-95', 'opacity-35', 'blur-[0.5px]', 'shadow-none', 'hover:opacity-75');
+          article.classList.remove('scale-105', 'opacity-100', 'z-10', 'shadow-2xl', 'ring-1', 'ring-primary-500/20', 'dark:ring-primary-500/30');
+        }
+      });
+
+      // Keep navigation controls fully enabled for infinite fluidity
+      prevBtn.classList.remove('opacity-40', 'pointer-events-none');
+      nextBtn.classList.remove('opacity-40', 'pointer-events-none');
+    };
+
+    // Expose updateSlider to local window context for external triggers
+    window.updateSlider = updateSlider;
+
+    // Prev Button Event Listener (Infinite repeatable wrap around)
+    prevBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (isTransitioning) return;
+      isTransitioning = true;
+      sliderTrack.style.transition = 'transform 550ms cubic-bezier(0.16, 1, 0.3, 1)';
+      window.currentProjectIndex--;
+      updateSlider();
+    });
+
+    // Next Button Event Listener (Infinite repeatable wrap around)
+    nextBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (isTransitioning) return;
+      isTransitioning = true;
+      sliderTrack.style.transition = 'transform 550ms cubic-bezier(0.16, 1, 0.3, 1)';
+      window.currentProjectIndex++;
+      updateSlider();
+    });
+
+    // Handle seamless snap after transition fires
+    sliderTrack.addEventListener('transitionend', (e) => {
+      if (e.propertyName !== 'transform') return;
+      isTransitioning = false;
+
+      // Swap instantly once you cross the original boundary edges
+      if (window.currentProjectIndex >= originalCount * 2) {
+        window.currentProjectIndex -= originalCount;
+        updateSlider({ instant: true });
+      } else if (window.currentProjectIndex < originalCount) {
+        window.currentProjectIndex += originalCount;
+        updateSlider({ instant: true });
+      }
+    });
+
+    // Touch support (swipe gestures on mobile screens)
+    let startX = 0;
+    let currentX = null;
+    let isSwiping = false;
+
+    sliderTrack.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+      currentX = null;
+      isSwiping = true;
+    }, { passive: true });
+
+    sliderTrack.addEventListener('touchmove', (e) => {
+      if (!isSwiping) return;
+      currentX = e.touches[0].clientX;
+    }, { passive: true });
+
+    sliderTrack.addEventListener('touchend', () => {
+      if (!isSwiping) return;
+      isSwiping = false;
+      if (currentX === null) return; // Clean tap - ignore swipe computation!
+
+      const diffX = startX - currentX;
+      if (Math.abs(diffX) > 40) {
+        if (diffX > 0) {
+          nextBtn.click();
+        } else {
+          prevBtn.click();
+        }
+      }
+    });
+
+    // Recalculate on viewport size adaptation (resize) with instant positioning snap to avoid overlaps
+    window.addEventListener('resize', () => {
+      // Normalize index if somehow outside safe center range during sudden viewport resize
+      if (window.currentProjectIndex >= originalCount * 2) {
+        window.currentProjectIndex -= originalCount;
+      } else if (window.currentProjectIndex < originalCount) {
+        window.currentProjectIndex += originalCount;
+      }
+      // Snap instantly to prevent visual tracking lag or sliding overlaps during active layout adjustments
+      updateSlider({ instant: true });
+      // Minor safeguard delay to settle complex responsive styles
+      setTimeout(() => updateSlider({ instant: true }), 50);
+      setTimeout(() => updateSlider({ instant: true }), 150);
+    }, { passive: true });
+
+    // Also update on window fully loaded to settle layout shifts perfectly
+    window.addEventListener('load', () => {
+      updateSlider({ instant: true });
+      setTimeout(() => updateSlider({ instant: true }), 200);
+    });
+
+    // Initial load slide centering calculation
+    updateSlider({ instant: true });
+    setTimeout(() => updateSlider({ instant: true }), 100);
+    setTimeout(() => updateSlider({ instant: true }), 250);
   }
 
   // 12. About Image Tilt
