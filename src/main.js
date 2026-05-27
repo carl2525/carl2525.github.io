@@ -55,15 +55,7 @@ const projectData = {
     videoUrl: '',
     url: 'https://pnp-retirement-calculator.vercel.app/'
   },
-  'wtw-test': {
-    title: 'WTW Portfolio Demo',
-    category: 'WordPress Design',
-    description: 'A custom corporate project page and services listing crafted on a WordPress foundation. Built with performance optimization, clean responsive layouts, optimized layout shifting (CLS), and semantic styling to ensure maximum SEO scores and rich brand fidelity.',
-    tags: ['Web Designer', 'WordPress', 'SEO', 'Creative Design', 'HTML5', 'CSS3'],
-    video: 'src/images/wtw_portfolio.png',
-    videoUrl: '',
-    url: 'https://wtwtestgorobao.wordpress.com/'
-  },
+
   'maldicion-notebook': {
     title: 'Maldicion Notebook',
     category: 'Creative Video',
