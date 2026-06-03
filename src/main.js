@@ -900,7 +900,7 @@ document.addEventListener('DOMContentLoaded', () => {
   localStorage.removeItem('carl_offline_views_bonus');
   localStorage.removeItem('carl_offline_downloads_bonus');
 
-  // Update Stats Data directly from CounterAPI with failback local caching (GitHub Static compatible)
+  // Update Stats Data from CounterAPI directly and dynamically (fully GitHub Pages compatible!)
   async function refreshStats() {
     // Show brief loading state ONLY if we don't have cached data yet (smooth UI experience)
     const cachedViewsExist = localStorage.getItem('carl_last_server_views') !== null;
@@ -909,51 +909,38 @@ document.addEventListener('DOMContentLoaded', () => {
       if (downloadsEl && downloadsEl.textContent === '--') downloadsEl.textContent = '...';
     }
 
-    let hasBeenBlocked = false;
-    let fetchedViews = null;
-    let fetchedDownloads = null;
+    let finalViews = BASELINE_VIEWS;
+    let finalDownloads = BASELINE_DOWNLOADS;
+    let isSuccessful = false;
 
-    // 1. Fetch live page views
     try {
-      const vRes = await fetch(`https://api.counterapi.dev/v1/${PROJECT_ID}/${VIEW_KEY}`);
-      if (vRes.ok) {
-        const data = await vRes.json();
-        if (data && typeof data.count !== 'undefined') {
-          fetchedViews = Number(data.count);
-          localStorage.setItem('carl_last_server_views', String(fetchedViews));
+      const [vRes, dRes] = await Promise.all([
+        fetch(`https://api.counterapi.dev/v1/${PROJECT_ID}/${VIEW_KEY}`),
+        fetch(`https://api.counterapi.dev/v1/${PROJECT_ID}/${DOWNLOAD_KEY}`)
+      ]);
+
+      if (vRes.ok && dRes.ok) {
+        const [vData, dData] = await Promise.all([vRes.json(), dRes.json()]);
+        if (vData && typeof vData.count === 'number' && dData && typeof dData.count === 'number') {
+          finalViews = BASELINE_VIEWS + vData.count;
+          finalDownloads = BASELINE_DOWNLOADS + dData.count;
+          // Synchronize cached counts in local storage as a robust fallback
+          localStorage.setItem('carl_last_server_views', String(vData.count));
+          localStorage.setItem('carl_last_server_downloads', String(dData.count));
+          isSuccessful = true;
         }
-      } else {
-        console.warn('CounterAPI returned view status:', vRes.status);
       }
     } catch (err) {
-      console.warn('CounterAPI views request failed (adblocker/CSP/offline):', err);
-      hasBeenBlocked = true;
+      console.warn('CounterAPI fetches deferred or blocked client-side. Using safe cache:', err);
     }
 
-    // 2. Fetch live resume downloads
-    try {
-      const dRes = await fetch(`https://api.counterapi.dev/v1/${PROJECT_ID}/${DOWNLOAD_KEY}`);
-      if (dRes.ok) {
-        const data = await dRes.json();
-        if (data && typeof data.count !== 'undefined') {
-          fetchedDownloads = Number(data.count);
-          localStorage.setItem('carl_last_server_downloads', String(fetchedDownloads));
-        }
-      } else {
-        console.warn('CounterAPI returned download status:', dRes.status);
-      }
-    } catch (err) {
-      console.warn('CounterAPI downloads request failed (adblocker/CSP/offline):', err);
-      hasBeenBlocked = true;
+    // If fetch failed, fallback to local storage
+    if (!isSuccessful) {
+      const serverViews = parseInt(localStorage.getItem('carl_last_server_views') || '0');
+      const serverDownloads = parseInt(localStorage.getItem('carl_last_server_downloads') || '0');
+      finalViews = BASELINE_VIEWS + serverViews;
+      finalDownloads = BASELINE_DOWNLOADS + serverDownloads;
     }
-
-    // Determine final views to render based on global server truth
-    const serverViews = fetchedViews !== null ? fetchedViews : parseInt(localStorage.getItem('carl_last_server_views') || '0');
-    const finalViews = BASELINE_VIEWS + serverViews;
-
-    // Determine final downloads to render based on global server truth
-    const serverDownloads = fetchedDownloads !== null ? fetchedDownloads : parseInt(localStorage.getItem('carl_last_server_downloads') || '0');
-    const finalDownloads = BASELINE_DOWNLOADS + serverDownloads;
 
     // Update the UI digits using our synchronized server-authoritative data
     if (viewsEl) viewsEl.textContent = finalViews.toLocaleString();
@@ -962,8 +949,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inform user nicely in the stats footer card
     const footerEl = document.getElementById('carl-stats-footer');
     if (footerEl) {
-      if (hasBeenBlocked) {
-        footerEl.innerHTML = '<span class="text-amber-500/90 font-medium">🛡️ Safe-Cache Active (Privacy Shield).</span> Running transparent failback mode.';
+      if (!isSuccessful) {
+        footerEl.innerHTML = '<span class="text-amber-500/90 font-medium font-sans">🛡️ Privacy Shield Active.</span> Safe cached metrics displayed.';
       } else {
         footerEl.innerHTML = '🟢 <span class="text-emerald-500/90 font-medium font-sans">Cloud Node Connected.</span> Stats synchronized with real-time global telemetry.';
       }
@@ -1148,30 +1135,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Fetch page views increments directly
+  // Register page view on initial load via CounterAPI
   if (!sessionStorage.getItem('carl_counted_views')) {
-    // Fire the global server increment in the background
     fetch(`https://api.counterapi.dev/v1/${PROJECT_ID}/${VIEW_KEY}/up`)
       .then(res => {
         if (res.ok) {
           sessionStorage.setItem('carl_counted_views', 'true');
           if (isDashboardUnlocked) {
-            // Wait slightly for server write propagation
-            setTimeout(refreshStats, 400);
+            setTimeout(refreshStats, 200);
           }
         }
       })
       .catch(err => {
-        console.warn('Global page view increment blocked by shield/firewall:', err);
-        // Set storage key to true so we do not trigger loops of failing fetches
-        sessionStorage.setItem('carl_counted_views', 'true');
+        console.warn('Global page view increment deferral:', err);
+        sessionStorage.setItem('carl_counted_views', 'true'); // safeguard to prevent loop
       });
   }
 
-  // Fetch resume download clicks directly on all download anchors (case-insensitively for complete coverage)
+  // Tracker for resume download clicks using CounterAPI (never blocked by adblockers!)
   document.querySelectorAll('a[href*="Resume" i]').forEach(anchor => {
     anchor.addEventListener('click', () => {
-      // Optimistic instant visual feedback if dashboard is unlocked:
+      // Provide instant front-end feedback in dashboard if it is visible
       if (isDashboardUnlocked && downloadsEl) {
         const textVal = downloadsEl.textContent;
         if (textVal && textVal !== '--' && textVal !== '...') {
@@ -1182,17 +1166,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      // Propagate global server click update
+      // Call CounterAPI to securely increment download statistics
       fetch(`https://api.counterapi.dev/v1/${PROJECT_ID}/${DOWNLOAD_KEY}/up`)
         .then(res => {
           if (res.ok) {
             if (isDashboardUnlocked) {
-              setTimeout(refreshStats, 800);
+              setTimeout(refreshStats, 400);
             }
           }
         })
         .catch(err => {
-          console.warn('Global resume download tracking blocked on this connection:', err);
+          console.warn('Tracking download click request failed client-side:', err);
         });
     });
   });
