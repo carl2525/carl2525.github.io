@@ -889,13 +889,13 @@ document.addEventListener('DOMContentLoaded', () => {
     lockIpBtn.className = 'flex-grow py-2 bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-xs font-bold rounded-xl transition-all text-center cursor-pointer select-none active:scale-95';
   }
 
-  // Update Stats Data from CounterAPI
+  // Update Stats Data from CounterAPI using the standard /v1/{namespace}/{counter_name} layout
   async function refreshStats() {
     if (viewsEl) viewsEl.textContent = '...';
     if (downloadsEl) downloadsEl.textContent = '...';
 
     try {
-      const vRes = await fetch(`https://api.counterapi.dev/v1/projects/${PROJECT_ID}/namespaces/${NAMESPACE_ID}/counters/${VIEW_KEY}`);
+      const vRes = await fetch(`https://api.counterapi.dev/v1/${PROJECT_ID}/${VIEW_KEY}`);
       if (vRes.ok) {
         const data = await vRes.json();
         if (viewsEl) viewsEl.textContent = Number(data.count || 0).toLocaleString();
@@ -907,7 +907,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      const dRes = await fetch(`https://api.counterapi.dev/v1/projects/${PROJECT_ID}/namespaces/${NAMESPACE_ID}/counters/${DOWNLOAD_KEY}`);
+      const dRes = await fetch(`https://api.counterapi.dev/v1/${PROJECT_ID}/${DOWNLOAD_KEY}`);
       if (dRes.ok) {
         const data = await dRes.json();
         if (downloadsEl) downloadsEl.textContent = Number(data.count || 0).toLocaleString();
@@ -935,6 +935,51 @@ document.addEventListener('DOMContentLoaded', () => {
     refreshStats();
   }
 
+  // Core Access Control Check
+  function evaluateAccess() {
+    const lockedIp = localStorage.getItem('carl_locked_ip');
+    const showStats = localStorage.getItem('carl_show_stats') === 'true';
+    
+    // Parse values from URL
+    const urlHash = window.location.hash;
+    const searchValues = new URLSearchParams(window.location.search);
+    const hasSecretHash = urlHash === '#stats' || urlHash === '#admin';
+    const hasSecretParam = searchValues.has('stats') || searchValues.has('admin');
+
+    const hasAccessKey = showStats || hasSecretHash || hasSecretParam;
+
+    // Handle hash and param storage + clean up address bar immediately if they hit with suffix
+    if (hasSecretHash || hasSecretParam) {
+      localStorage.setItem('carl_show_stats', 'true');
+      if (hasSecretHash) {
+        history.replaceState('', document.title, window.location.pathname + window.location.search);
+      } else if (hasSecretParam) {
+        searchValues.delete('stats');
+        searchValues.delete('admin');
+        const cleanParams = searchValues.toString();
+        history.replaceState('', document.title, window.location.pathname + (cleanParams ? '?' + cleanParams : '') + window.location.hash);
+      }
+    }
+
+    if (lockedIp) {
+      if (currentIpAddress === '') {
+        // Wait for checkVisitorIp api request to complete
+        return;
+      }
+      if (currentIpAddress === lockedIp) {
+        unlockDashboard();
+      } else {
+        // Blocked: Visitor is loading using #stats or cache, but on a separate/unauthorized connection
+        console.warn('Dashboard access rejected: visitor IP does not match the pinned device IP.');
+      }
+    } else {
+      // Standard flow - allow password-less access if hash/storage key matched
+      if (hasAccessKey) {
+        unlockDashboard();
+      }
+    }
+  }
+
   // Check visitor's public IP
   async function checkVisitorIp() {
     try {
@@ -942,47 +987,26 @@ document.addEventListener('DOMContentLoaded', () => {
       if (res.ok) {
         const data = await res.json();
         currentIpAddress = data.ip || '';
-        document.getElementById('carl-ip-display').textContent = currentIpAddress;
-        
-        const lockedIp = localStorage.getItem('carl_locked_ip');
-        if (lockedIp && currentIpAddress === lockedIp) {
-          unlockDashboard();
+        const ipDisplay = document.getElementById('carl-ip-display');
+        if (ipDisplay) {
+          ipDisplay.textContent = currentIpAddress;
         }
+        
+        evaluateAccess();
       } else {
-        document.getElementById('carl-ip-display').textContent = 'Blocked/NAT';
+        const ipDisplay = document.getElementById('carl-ip-display');
+        if (ipDisplay) ipDisplay.textContent = 'Blocked/NAT';
+        evaluateAccess();
       }
     } catch {
-      document.getElementById('carl-ip-display').textContent = 'Blocked/NAT';
+      const ipDisplay = document.getElementById('carl-ip-display');
+      if (ipDisplay) ipDisplay.textContent = 'Blocked/NAT';
+      evaluateAccess();
     }
   }
 
-  // Handle URL hash, search query params, and LocalStorage values
-  const urlHash = window.location.hash;
-  const searchValues = new URLSearchParams(window.location.search);
-
-  const hasSecretHash = urlHash === '#stats' || urlHash === '#admin';
-  const hasSecretParam = searchValues.has('stats') || searchValues.has('admin');
-
-  if (hasSecretHash || hasSecretParam) {
-    localStorage.setItem('carl_show_stats', 'true');
-    unlockDashboard();
-
-    // Settle address bar cleanly
-    if (hasSecretHash) {
-      history.replaceState('', document.title, window.location.pathname + window.location.search);
-    } else if (hasSecretParam) {
-      searchValues.delete('stats');
-      searchValues.delete('admin');
-      const cleanParams = searchValues.toString();
-      history.replaceState('', document.title, window.location.pathname + (cleanParams ? '?' + cleanParams : '') + window.location.hash);
-    }
-  }
-
-  if (localStorage.getItem('carl_show_stats') === 'true') {
-    unlockDashboard();
-  }
-
-  // Fetch the visitor IP address
+  // Initial access check + IP detection
+  evaluateAccess();
   checkVisitorIp();
 
   // Button actions: IP lock trigger
@@ -992,7 +1016,7 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.removeItem('carl_locked_ip');
       lockIpBtn.textContent = 'Lock Active IP';
       lockIpBtn.className = 'flex-grow py-2 bg-primary-600/10 hover:bg-primary-600 text-primary-600 hover:text-white dark:text-primary-400 dark:hover:bg-primary-600 dark:hover:text-white text-xs font-bold rounded-xl transition-all text-center cursor-pointer select-none active:scale-95 border border-primary-500/10';
-      alert('IP lock released. Other computers on this IP will no longer have auto-access.');
+      alert('IP lock released. Other networks/connections will now require standard URL suffix authorization.');
     } else if (currentIpAddress) {
       localStorage.setItem('carl_locked_ip', currentIpAddress);
       lockIpBtn.textContent = 'Unlock IP';
@@ -1018,7 +1042,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Fetch page views increments
   if (!sessionStorage.getItem('carl_counted_views')) {
-    fetch(`https://api.counterapi.dev/v1/projects/${PROJECT_ID}/namespaces/${NAMESPACE_ID}/counters/${VIEW_KEY}/up`)
+    fetch(`https://api.counterapi.dev/v1/${PROJECT_ID}/${VIEW_KEY}/up`)
       .then(res => {
         if (res.ok) {
           sessionStorage.setItem('carl_counted_views', 'true');
@@ -1033,7 +1057,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Fetch resume download clicks
   document.querySelectorAll('a[href*="_Resume.pdf"]').forEach(anchor => {
     anchor.addEventListener('click', () => {
-      fetch(`https://api.counterapi.dev/v1/projects/${PROJECT_ID}/namespaces/${NAMESPACE_ID}/counters/${DOWNLOAD_KEY}/up`)
+      fetch(`https://api.counterapi.dev/v1/${PROJECT_ID}/${DOWNLOAD_KEY}/up`)
         .then(res => {
           if (res.ok && isDashboardUnlocked) {
             setTimeout(refreshStats, 800);
