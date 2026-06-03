@@ -856,7 +856,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
 
       <!-- Explainer footer -->
-      <p class="text-[9.5px] text-zinc-400/80 dark:text-zinc-500/80 text-center italic border-t border-zinc-100 dark:border-zinc-800/50 pt-2 leading-tight">
+      <p id="carl-stats-footer" class="text-[9.5px] text-zinc-400/80 dark:text-zinc-500/80 text-center italic border-t border-zinc-100 dark:border-zinc-800/50 pt-2 leading-tight">
         Protected metrics node. Completely hidden from general page visitors.
       </p>
     </div>
@@ -889,33 +889,59 @@ document.addEventListener('DOMContentLoaded', () => {
     lockIpBtn.className = 'flex-grow py-2 bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-xs font-bold rounded-xl transition-all text-center cursor-pointer select-none active:scale-95';
   }
 
-  // Update Stats Data from CounterAPI using the standard /v1/{namespace}/{counter_name} layout
+  // Update Stats Data directly from CounterAPI (completely static & frontend-only for GitHub compatibility)
   async function refreshStats() {
     if (viewsEl) viewsEl.textContent = '...';
     if (downloadsEl) downloadsEl.textContent = '...';
 
+    let hasBeenBlocked = false;
+
+    // Fetch page views
     try {
       const vRes = await fetch(`https://api.counterapi.dev/v1/${PROJECT_ID}/${VIEW_KEY}`);
       if (vRes.ok) {
         const data = await vRes.json();
-        if (viewsEl) viewsEl.textContent = Number(data.count || 0).toLocaleString();
+        if (data && typeof data.count !== 'undefined') {
+          if (viewsEl) viewsEl.textContent = Number(data.count).toLocaleString();
+        } else {
+          if (viewsEl) viewsEl.textContent = '0';
+        }
       } else {
-        if (viewsEl) viewsEl.textContent = '0';
+        if (viewsEl) viewsEl.textContent = 'Err';
       }
-    } catch {
-      if (viewsEl) viewsEl.textContent = 'Err';
+    } catch (err) {
+      console.warn('Failed to load CounterAPI page views directly:', err);
+      if (viewsEl) viewsEl.textContent = 'Blocked';
+      hasBeenBlocked = true;
     }
 
+    // Fetch resume downloads
     try {
       const dRes = await fetch(`https://api.counterapi.dev/v1/${PROJECT_ID}/${DOWNLOAD_KEY}`);
       if (dRes.ok) {
         const data = await dRes.json();
-        if (downloadsEl) downloadsEl.textContent = Number(data.count || 0).toLocaleString();
+        if (data && typeof data.count !== 'undefined') {
+          if (downloadsEl) downloadsEl.textContent = Number(data.count).toLocaleString();
+        } else {
+          if (downloadsEl) downloadsEl.textContent = '0';
+        }
       } else {
-        if (downloadsEl) downloadsEl.textContent = '0';
+        if (downloadsEl) downloadsEl.textContent = 'Err';
       }
-    } catch {
-      if (downloadsEl) downloadsEl.textContent = 'Err';
+    } catch (err) {
+      console.warn('Failed to load CounterAPI resume downloads directly:', err);
+      if (downloadsEl) downloadsEl.textContent = 'Blocked';
+      hasBeenBlocked = true;
+    }
+
+    // Inform user in case an adblocker/privacy shield has interfered
+    const footerEl = document.getElementById('carl-stats-footer');
+    if (footerEl) {
+      if (hasBeenBlocked) {
+        footerEl.innerHTML = '<span class="text-amber-500 font-medium">⚠️ CounterAPI Blocked.</span> Please disable Ad-Blocker/Shields to view real-time metrics.';
+      } else {
+        footerEl.textContent = 'Protected metrics node. Completely hidden from general page visitors.';
+      }
     }
   }
 
@@ -1081,7 +1107,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Fetch page views increments
+  // Fetch page views increments directly
   if (!sessionStorage.getItem('carl_counted_views')) {
     fetch(`https://api.counterapi.dev/v1/${PROJECT_ID}/${VIEW_KEY}/up`)
       .then(res => {
@@ -1092,10 +1118,10 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
       })
-      .catch(err => console.warn('Increments tracking delayed:', err));
+      .catch(err => console.warn('Increments tracking delayed/blocked:', err));
   }
 
-  // Fetch resume download clicks
+  // Fetch resume download clicks directly
   document.querySelectorAll('a[href*="_Resume.pdf"]').forEach(anchor => {
     anchor.addEventListener('click', () => {
       fetch(`https://api.counterapi.dev/v1/${PROJECT_ID}/${DOWNLOAD_KEY}/up`)
@@ -1104,7 +1130,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(refreshStats, 800);
           }
         })
-        .catch(err => console.warn('Download tracker delayed:', err));
+        .catch(err => console.warn('Download tracker delayed/blocked:', err));
     });
   });
 });
