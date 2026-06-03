@@ -55,7 +55,15 @@ const projectData = {
     videoUrl: '',
     url: 'https://pnp-retirement-calculator.vercel.app/'
   },
-
+  'wtw-test': {
+    title: 'WTW Portfolio Demo',
+    category: 'WordPress Design',
+    description: 'A custom corporate project page and services listing crafted on a WordPress foundation. Built with performance optimization, clean responsive layouts, optimized layout shifting (CLS), and semantic styling to ensure maximum SEO scores and rich brand fidelity.',
+    tags: ['Web Designer', 'WordPress', 'SEO', 'Creative Design', 'HTML5', 'CSS3'],
+    video: 'src/images/wtw_portfolio.png',
+    videoUrl: '',
+    url: 'https://wtwtestgorobao.wordpress.com/'
+  },
   'maldicion-notebook': {
     title: 'Maldicion Notebook',
     category: 'Creative Video',
@@ -761,4 +769,277 @@ document.addEventListener('DOMContentLoaded', () => {
       contactForm.reset();
     });
   }
+
+  // 14. Private Metric Indicators & Analytics Tracker
+  // Setup project specific keys
+  const PROJECT_ID = 'carlerwingorobao_portfolio';
+  const NAMESPACE_ID = 'analytics';
+  const VIEW_KEY = 'page_views';
+  const DOWNLOAD_KEY = 'resume_downloads';
+
+  let currentIpAddress = '';
+  let isDashboardUnlocked = false;
+
+  // Render the metrics dashboard dynamically (so index.html remains clean and pristine)
+  const statsWidget = document.createElement('div');
+  statsWidget.id = 'carl-stats-widget';
+  statsWidget.className = 'fixed bottom-6 left-6 z-[9999] flex flex-col font-sans transition-all duration-500 opacity-0 translate-y-4 pointer-events-none scale-95';
+  statsWidget.innerHTML = `
+    <!-- Collapsed Toggle Button -->
+    <button id="carl-stats-toggle" class="pointer-events-auto flex items-center justify-center gap-2 px-4 py-2.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 hover:bg-zinc-850 dark:hover:bg-zinc-100 hover:scale-[1.05] text-xs font-bold rounded-full transition-all shadow-xl shadow-zinc-950/20 cursor-pointer border border-white/10 dark:border-zinc-200/10 select-none active:scale-95">
+      <span class="relative flex h-2 w-2">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+      </span>
+      <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+      <span>Review Metrics</span>
+    </button>
+
+    <!-- Expanded Dashboard Panel -->
+    <div id="carl-stats-panel" class="hidden pointer-events-auto w-72 sm:w-80 p-5 rounded-[24px] bg-white/95 dark:bg-zinc-950/95 backdrop-blur-xl border border-zinc-200 dark:border-zinc-800/80 shadow-2xl flex flex-col gap-4 text-zinc-900 dark:text-white relative">
+      
+      <!-- Top Row -->
+      <div class="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800/50 pb-3">
+        <div class="flex items-center gap-2">
+          <div class="p-1.5 rounded-lg bg-primary-500/10 text-primary-600 dark:text-primary-400">
+            <i data-lucide="activity" class="w-4 h-4"></i>
+          </div>
+          <span class="text-sm font-bold font-display tracking-tight text-zinc-900 dark:text-white">Admin Portfolio Stats</span>
+        </div>
+        <button id="carl-stats-close" class="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer">
+          <i data-lucide="minus-square" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Stats Visual Grid -->
+      <div class="grid grid-cols-2 gap-3">
+        <!-- Page Views Block -->
+        <div class="p-3.5 bg-zinc-50 dark:bg-zinc-900/40 rounded-2xl border border-zinc-100 dark:border-zinc-800/30 text-center flex flex-col items-center">
+          <div class="p-2 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 mb-2">
+            <i data-lucide="eye" class="w-4 h-4"></i>
+          </div>
+          <span id="carl-stats-views" class="text-xl font-black text-zinc-900 dark:text-white font-mono leading-none">--</span>
+          <span class="text-[9.5px] uppercase font-bold tracking-wider text-zinc-500 dark:text-zinc-400 mt-1.5">Page Views</span>
+        </div>
+
+        <!-- Resume Downloads -->
+        <div class="p-3.5 bg-zinc-50 dark:bg-zinc-900/40 rounded-2xl border border-zinc-100 dark:border-zinc-800/30 text-center flex flex-col items-center">
+          <div class="p-2 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 mb-2">
+            <i data-lucide="file-down" class="w-4 h-4"></i>
+          </div>
+          <span id="carl-stats-downloads" class="text-xl font-black text-zinc-900 dark:text-white font-mono leading-none">--</span>
+          <span class="text-[9.5px] uppercase font-bold tracking-wider text-zinc-500 dark:text-zinc-400 mt-1.5">Cv Downloads</span>
+        </div>
+      </div>
+
+      <!-- Settings / Authorize Panel -->
+      <div class="flex flex-col gap-2.5 pt-1.5 border-t border-zinc-100 dark:border-zinc-800/50">
+        <div class="flex items-center justify-between text-xs font-medium text-zinc-500 dark:text-zinc-400">
+          <span>Device Credentials:</span>
+          <span id="carl-device-status-badge" class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-extrabold text-[9.5px] tracking-wide">VERIFIED</span>
+        </div>
+        
+        <div class="flex flex-col gap-2">
+          <div class="text-[10px] text-zinc-400 dark:text-zinc-500 flex items-center justify-between">
+            <span>Your Public IP:</span>
+            <span id="carl-ip-display" class="font-mono text-zinc-500 dark:text-zinc-400 font-semibold">Detecting...</span>
+          </div>
+          <div class="flex gap-2">
+            <button id="carl-lock-ip-btn" class="flex-grow py-2 bg-primary-600/10 hover:bg-primary-600 text-primary-600 hover:text-white dark:text-primary-400 dark:hover:bg-primary-600 dark:hover:text-white text-xs font-bold rounded-xl transition-all text-center cursor-pointer select-none active:scale-95 border border-primary-500/10">
+              Lock Active IP
+            </button>
+            <button id="carl-clear-mem-btn" class="py-2 px-3 bg-red-500/10 text-red-600 hover:text-white hover:bg-red-500 dark:text-red-400 text-xs font-bold rounded-xl transition-all text-center cursor-pointer select-none active:scale-95" title="Deauthorize device and completely hide metrics dashboard">
+              Hide
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Explainer footer -->
+      <p class="text-[9.5px] text-zinc-400/80 dark:text-zinc-500/80 text-center italic border-t border-zinc-100 dark:border-zinc-800/50 pt-2 leading-tight">
+        Protected metrics node. Completely hidden from general page visitors.
+      </p>
+    </div>
+  `;
+  document.body.appendChild(statsWidget);
+
+  // Initialize Elements and Handlers
+  const toggleBtn = document.getElementById('carl-stats-toggle');
+  const panel = document.getElementById('carl-stats-panel');
+  const closeBtn = document.getElementById('carl-stats-close');
+  const lockIpBtn = document.getElementById('carl-lock-ip-btn');
+  const clearMemBtn = document.getElementById('carl-clear-mem-btn');
+  const viewsEl = document.getElementById('carl-stats-views');
+  const downloadsEl = document.getElementById('carl-stats-downloads');
+
+  toggleBtn.addEventListener('click', () => {
+    toggleBtn.classList.add('hidden');
+    panel.classList.remove('hidden');
+  });
+
+  closeBtn.addEventListener('click', () => {
+    panel.classList.add('hidden');
+    toggleBtn.classList.remove('hidden');
+  });
+
+  // Load and Lock active IP configuration
+  const savedLockedIp = localStorage.getItem('carl_locked_ip');
+  if (savedLockedIp) {
+    lockIpBtn.textContent = 'Unlock IP';
+    lockIpBtn.className = 'flex-grow py-2 bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-xs font-bold rounded-xl transition-all text-center cursor-pointer select-none active:scale-95';
+  }
+
+  // Update Stats Data from CounterAPI
+  async function refreshStats() {
+    if (viewsEl) viewsEl.textContent = '...';
+    if (downloadsEl) downloadsEl.textContent = '...';
+
+    try {
+      const vRes = await fetch(`https://api.counterapi.dev/v1/projects/${PROJECT_ID}/namespaces/${NAMESPACE_ID}/counters/${VIEW_KEY}`);
+      if (vRes.ok) {
+        const data = await vRes.json();
+        if (viewsEl) viewsEl.textContent = Number(data.count || 0).toLocaleString();
+      } else {
+        if (viewsEl) viewsEl.textContent = '0';
+      }
+    } catch {
+      if (viewsEl) viewsEl.textContent = 'Err';
+    }
+
+    try {
+      const dRes = await fetch(`https://api.counterapi.dev/v1/projects/${PROJECT_ID}/namespaces/${NAMESPACE_ID}/counters/${DOWNLOAD_KEY}`);
+      if (dRes.ok) {
+        const data = await dRes.json();
+        if (downloadsEl) downloadsEl.textContent = Number(data.count || 0).toLocaleString();
+      } else {
+        if (downloadsEl) downloadsEl.textContent = '0';
+      }
+    } catch {
+      if (downloadsEl) downloadsEl.textContent = 'Err';
+    }
+  }
+
+  // Unlock elements smoothly
+  function unlockDashboard() {
+    if (isDashboardUnlocked) return;
+    isDashboardUnlocked = true;
+    
+    // Hydrate icons specifically inside our newly added dynamic element
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+    
+    statsWidget.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none', 'scale-95');
+    statsWidget.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto', 'scale-100');
+    
+    refreshStats();
+  }
+
+  // Check visitor's public IP
+  async function checkVisitorIp() {
+    try {
+      const res = await fetch('https://api.ipify.org?format=json');
+      if (res.ok) {
+        const data = await res.json();
+        currentIpAddress = data.ip || '';
+        document.getElementById('carl-ip-display').textContent = currentIpAddress;
+        
+        const lockedIp = localStorage.getItem('carl_locked_ip');
+        if (lockedIp && currentIpAddress === lockedIp) {
+          unlockDashboard();
+        }
+      } else {
+        document.getElementById('carl-ip-display').textContent = 'Blocked/NAT';
+      }
+    } catch {
+      document.getElementById('carl-ip-display').textContent = 'Blocked/NAT';
+    }
+  }
+
+  // Handle URL hash, search query params, and LocalStorage values
+  const urlHash = window.location.hash;
+  const searchValues = new URLSearchParams(window.location.search);
+
+  const hasSecretHash = urlHash === '#stats' || urlHash === '#admin';
+  const hasSecretParam = searchValues.has('stats') || searchValues.has('admin');
+
+  if (hasSecretHash || hasSecretParam) {
+    localStorage.setItem('carl_show_stats', 'true');
+    unlockDashboard();
+
+    // Settle address bar cleanly
+    if (hasSecretHash) {
+      history.replaceState('', document.title, window.location.pathname + window.location.search);
+    } else if (hasSecretParam) {
+      searchValues.delete('stats');
+      searchValues.delete('admin');
+      const cleanParams = searchValues.toString();
+      history.replaceState('', document.title, window.location.pathname + (cleanParams ? '?' + cleanParams : '') + window.location.hash);
+    }
+  }
+
+  if (localStorage.getItem('carl_show_stats') === 'true') {
+    unlockDashboard();
+  }
+
+  // Fetch the visitor IP address
+  checkVisitorIp();
+
+  // Button actions: IP lock trigger
+  lockIpBtn.addEventListener('click', () => {
+    const lockedIp = localStorage.getItem('carl_locked_ip');
+    if (lockedIp) {
+      localStorage.removeItem('carl_locked_ip');
+      lockIpBtn.textContent = 'Lock Active IP';
+      lockIpBtn.className = 'flex-grow py-2 bg-primary-600/10 hover:bg-primary-600 text-primary-600 hover:text-white dark:text-primary-400 dark:hover:bg-primary-600 dark:hover:text-white text-xs font-bold rounded-xl transition-all text-center cursor-pointer select-none active:scale-95 border border-primary-500/10';
+      alert('IP lock released. Other computers on this IP will no longer have auto-access.');
+    } else if (currentIpAddress) {
+      localStorage.setItem('carl_locked_ip', currentIpAddress);
+      lockIpBtn.textContent = 'Unlock IP';
+      lockIpBtn.className = 'flex-grow py-2 bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-xs font-bold rounded-xl transition-all text-center cursor-pointer select-none active:scale-95';
+      alert(`Success! IP: ${currentIpAddress} is locked. All devices on your network will now view this metric badge automatically without needing url hashes.`);
+    } else {
+      alert('Still detecting IP address... Check server availability.');
+    }
+  });
+
+  // Button actions: Clear session and hide
+  clearMemBtn.addEventListener('click', () => {
+    if (confirm('Deauthorize device? This hides the analytics board from this device. You can restore it anytime by opening your site index with the url hash suffix: yoursite.com/#stats')) {
+      localStorage.removeItem('carl_show_stats');
+      localStorage.removeItem('carl_locked_ip');
+      statsWidget.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none', 'scale-95');
+      statsWidget.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto', 'scale-100');
+      setTimeout(() => {
+        statsWidget.style.display = 'none';
+      }, 500);
+    }
+  });
+
+  // Fetch page views increments
+  if (!sessionStorage.getItem('carl_counted_views')) {
+    fetch(`https://api.counterapi.dev/v1/projects/${PROJECT_ID}/namespaces/${NAMESPACE_ID}/counters/${VIEW_KEY}/up`)
+      .then(res => {
+        if (res.ok) {
+          sessionStorage.setItem('carl_counted_views', 'true');
+          if (isDashboardUnlocked) {
+            refreshStats();
+          }
+        }
+      })
+      .catch(err => console.warn('Increments tracking delayed:', err));
+  }
+
+  // Fetch resume download clicks
+  document.querySelectorAll('a[href*="_Resume.pdf"]').forEach(anchor => {
+    anchor.addEventListener('click', () => {
+      fetch(`https://api.counterapi.dev/v1/projects/${PROJECT_ID}/namespaces/${NAMESPACE_ID}/counters/${DOWNLOAD_KEY}/up`)
+        .then(res => {
+          if (res.ok && isDashboardUnlocked) {
+            setTimeout(refreshStats, 800);
+          }
+        })
+        .catch(err => console.warn('Download tracker delayed:', err));
+    });
+  });
 });
