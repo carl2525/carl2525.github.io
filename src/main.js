@@ -930,15 +930,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     statsWidget.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none', 'scale-95');
+    statsWidget.style.display = 'flex';
     statsWidget.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto', 'scale-100');
     
     refreshStats();
   }
 
+  // Hide elements smoothly
+  function hideDashboardQuietly() {
+    isDashboardUnlocked = false;
+    statsWidget.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none', 'scale-95');
+    statsWidget.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto', 'scale-100');
+  }
+
   // Core Access Control Check
   function evaluateAccess() {
     const lockedIp = localStorage.getItem('carl_locked_ip');
-    const showStats = localStorage.getItem('carl_show_stats') === 'true';
     
     // Parse values from URL
     const urlHash = window.location.hash;
@@ -946,11 +953,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const hasSecretHash = urlHash === '#stats' || urlHash === '#admin';
     const hasSecretParam = searchValues.has('stats') || searchValues.has('admin');
 
-    const hasAccessKey = showStats || hasSecretHash || hasSecretParam;
-
     // Handle hash and param storage + clean up address bar immediately if they hit with suffix
     if (hasSecretHash || hasSecretParam) {
-      localStorage.setItem('carl_show_stats', 'true');
       if (hasSecretHash) {
         history.replaceState('', document.title, window.location.pathname + window.location.search);
       } else if (hasSecretParam) {
@@ -961,48 +965,82 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    const showStats = localStorage.getItem('carl_show_stats') === 'true';
+    const hasAccessKey = showStats || hasSecretHash || hasSecretParam;
+
     if (lockedIp) {
       if (currentIpAddress === '') {
-        // Wait for checkVisitorIp api request to complete
+        // Wait for checkVisitorIp api request to complete (remain hidden)
+        hideDashboardQuietly();
         return;
       }
+
       if (currentIpAddress === lockedIp) {
+        // IP matches our locked network! Automatically unlock or persist access
+        if (hasAccessKey) {
+          localStorage.setItem('carl_show_stats', 'true');
+        }
         unlockDashboard();
       } else {
-        // Blocked: Visitor is loading using #stats or cache, but on a separate/unauthorized connection
+        // Enforce Strict IP Lock: Visitor is on a separate connection. Keep the widget hidden & erase credentials
+        hideDashboardQuietly();
+        localStorage.removeItem('carl_show_stats');
         console.warn('Dashboard access rejected: visitor IP does not match the pinned device IP.');
       }
     } else {
-      // Standard flow - allow password-less access if hash/storage key matched
+      // Standard flow (No IP Lock active) - unlock if valid hash or previous storage key exists
       if (hasAccessKey) {
+        localStorage.setItem('carl_show_stats', 'true');
         unlockDashboard();
+      } else {
+        hideDashboardQuietly();
       }
     }
   }
 
-  // Check visitor's public IP
+  // Check visitor's public IP using a resilient cascade of providers
   async function checkVisitorIp() {
-    try {
-      const res = await fetch('https://api.ipify.org?format=json');
-      if (res.ok) {
+    const ipProviders = [
+      async () => {
+        const res = await fetch('https://api.ipify.org?format=json');
+        if (!res.ok) throw new Error('Primary ipify failed');
         const data = await res.json();
-        currentIpAddress = data.ip || '';
-        const ipDisplay = document.getElementById('carl-ip-display');
-        if (ipDisplay) {
-          ipDisplay.textContent = currentIpAddress;
-        }
-        
-        evaluateAccess();
-      } else {
-        const ipDisplay = document.getElementById('carl-ip-display');
-        if (ipDisplay) ipDisplay.textContent = 'Blocked/NAT';
-        evaluateAccess();
+        return data.ip || '';
+      },
+      async () => {
+        const res = await fetch('https://ipapi.co/json/');
+        if (!res.ok) throw new Error('Fallback ipapi failed');
+        const data = await res.json();
+        return data.ip || '';
+      },
+      async () => {
+        const res = await fetch('https://ipv4.icanhazip.com/');
+        if (!res.ok) throw new Error('Fallback icanhazip failed');
+        const text = await res.text();
+        return text.trim();
       }
-    } catch {
-      const ipDisplay = document.getElementById('carl-ip-display');
-      if (ipDisplay) ipDisplay.textContent = 'Blocked/NAT';
-      evaluateAccess();
+    ];
+
+    let detectedIp = '';
+    for (const lookup of ipProviders) {
+      try {
+        detectedIp = await lookup();
+        if (detectedIp) break;
+      } catch (err) {
+        console.warn('IP lookup provider bypassed:', err);
+      }
     }
+
+    const ipDisplay = document.getElementById('carl-ip-display');
+    if (detectedIp) {
+      currentIpAddress = detectedIp;
+      if (ipDisplay) ipDisplay.textContent = currentIpAddress;
+    } else {
+      currentIpAddress = 'Blocked/NAT';
+      if (ipDisplay) ipDisplay.textContent = 'Blocked/NAT';
+    }
+    
+    evaluateAccess();
   }
 
   // Initial access check + IP detection
@@ -1017,13 +1055,15 @@ document.addEventListener('DOMContentLoaded', () => {
       lockIpBtn.textContent = 'Lock Active IP';
       lockIpBtn.className = 'flex-grow py-2 bg-primary-600/10 hover:bg-primary-600 text-primary-600 hover:text-white dark:text-primary-400 dark:hover:bg-primary-600 dark:hover:text-white text-xs font-bold rounded-xl transition-all text-center cursor-pointer select-none active:scale-95 border border-primary-500/10';
       alert('IP lock released. Other networks/connections will now require standard URL suffix authorization.');
-    } else if (currentIpAddress) {
+      evaluateAccess();
+    } else if (currentIpAddress && currentIpAddress !== 'Blocked/NAT') {
       localStorage.setItem('carl_locked_ip', currentIpAddress);
       lockIpBtn.textContent = 'Unlock IP';
       lockIpBtn.className = 'flex-grow py-2 bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-xs font-bold rounded-xl transition-all text-center cursor-pointer select-none active:scale-95';
       alert(`Success! IP: ${currentIpAddress} is locked. All devices on your network will now view this metric badge automatically without needing url hashes.`);
+      evaluateAccess();
     } else {
-      alert('Still detecting IP address... Check server availability.');
+      alert('Still detecting IP address or access blocked. Check server availability.');
     }
   });
 
@@ -1037,6 +1077,7 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         statsWidget.style.display = 'none';
       }, 500);
+      evaluateAccess();
     }
   });
 
