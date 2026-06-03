@@ -875,6 +875,7 @@ document.addEventListener('DOMContentLoaded', () => {
   toggleBtn.addEventListener('click', () => {
     toggleBtn.classList.add('hidden');
     panel.classList.remove('hidden');
+    refreshStats(); // Instantly pull live globally-accurate counts when toggled!
   });
 
   closeBtn.addEventListener('click', () => {
@@ -893,28 +894,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const BASELINE_VIEWS = 1530; 
   const BASELINE_DOWNLOADS = 47; 
 
-  // Cleanup/migrate stale legacy localStorage keys from previous iterations if they exist
-  // This ensures a beautifully clean transition to client-to-client device-synchronous master stats
-  const legacyViews = parseInt(localStorage.getItem('carl_cached_views'));
-  if (legacyViews && legacyViews >= BASELINE_VIEWS) {
-    localStorage.setItem('carl_last_server_views', String(legacyViews - BASELINE_VIEWS));
-    localStorage.removeItem('carl_cached_views');
-  } else if (localStorage.getItem('carl_cached_views')) {
-    localStorage.removeItem('carl_cached_views');
-  }
-
-  const legacyDownloads = parseInt(localStorage.getItem('carl_cached_downloads'));
-  if (legacyDownloads && legacyDownloads >= BASELINE_DOWNLOADS) {
-    localStorage.setItem('carl_last_server_downloads', String(legacyDownloads - BASELINE_DOWNLOADS));
-    localStorage.removeItem('carl_cached_downloads');
-  } else if (localStorage.getItem('carl_cached_downloads')) {
-    localStorage.removeItem('carl_cached_downloads');
-  }
+  // Cleanup all legacy drift keys from previous iterations so devices resolve to the exact same numbers
+  localStorage.removeItem('carl_cached_views');
+  localStorage.removeItem('carl_cached_downloads');
+  localStorage.removeItem('carl_offline_views_bonus');
+  localStorage.removeItem('carl_offline_downloads_bonus');
 
   // Update Stats Data directly from CounterAPI with failback local caching (GitHub Static compatible)
   async function refreshStats() {
-    if (viewsEl) viewsEl.textContent = '...';
-    if (downloadsEl) downloadsEl.textContent = '...';
+    // Show brief loading state ONLY if we don't have cached data yet (smooth UI experience)
+    const cachedViewsExist = localStorage.getItem('carl_last_server_views') !== null;
+    if (!cachedViewsExist) {
+      if (viewsEl && viewsEl.textContent === '--') viewsEl.textContent = '...';
+      if (downloadsEl && downloadsEl.textContent === '--') downloadsEl.textContent = '...';
+    }
 
     let hasBeenBlocked = false;
     let fetchedViews = null;
@@ -954,17 +947,15 @@ document.addEventListener('DOMContentLoaded', () => {
       hasBeenBlocked = true;
     }
 
-    // Determine final views to render
+    // Determine final views to render based on global server truth
     const serverViews = fetchedViews !== null ? fetchedViews : parseInt(localStorage.getItem('carl_last_server_views') || '0');
-    const offlineViewsBonus = hasBeenBlocked ? parseInt(localStorage.getItem('carl_offline_views_bonus') || '0') : 0;
-    const finalViews = BASELINE_VIEWS + serverViews + offlineViewsBonus;
+    const finalViews = BASELINE_VIEWS + serverViews;
 
-    // Determine final downloads to render
+    // Determine final downloads to render based on global server truth
     const serverDownloads = fetchedDownloads !== null ? fetchedDownloads : parseInt(localStorage.getItem('carl_last_server_downloads') || '0');
-    const offlineDownloadsBonus = hasBeenBlocked ? parseInt(localStorage.getItem('carl_offline_downloads_bonus') || '0') : 0;
-    const finalDownloads = BASELINE_DOWNLOADS + serverDownloads + offlineDownloadsBonus;
+    const finalDownloads = BASELINE_DOWNLOADS + serverDownloads;
 
-    // Update the UI digits using our synchronized data
+    // Update the UI digits using our synchronized server-authoritative data
     if (viewsEl) viewsEl.textContent = finalViews.toLocaleString();
     if (downloadsEl) downloadsEl.textContent = finalDownloads.toLocaleString();
 
@@ -974,10 +965,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (hasBeenBlocked) {
         footerEl.innerHTML = '<span class="text-amber-500/90 font-medium">🛡️ Safe-Cache Active (Privacy Shield).</span> Running transparent failback mode.';
       } else {
-        footerEl.innerHTML = '🟢 <span class="text-emerald-500/90 font-medium">Cloud Node Connected.</span> Stats synchronized with real-time global telemetry.';
+        footerEl.innerHTML = '🟢 <span class="text-emerald-500/90 font-medium font-sans">Cloud Node Connected.</span> Stats synchronized with real-time global telemetry.';
       }
     }
   }
+
+  let statsPollInterval = null;
 
   // Unlock elements smoothly
   function unlockDashboard() {
@@ -994,6 +987,16 @@ document.addEventListener('DOMContentLoaded', () => {
     statsWidget.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto', 'scale-100');
     
     refreshStats();
+
+    // Live auto-polling: refresh stats every 10 seconds if user has the tab active and panel expanded
+    if (!statsPollInterval) {
+      statsPollInterval = setInterval(() => {
+        if (isDashboardUnlocked && !panel.classList.contains('hidden') && document.hasFocus()) {
+          // Silent refresh (doesn't trigger '...' loading if data already exists to prevent flickering)
+          refreshStats();
+        }
+      }, 10000);
+    }
   }
 
   // Hide elements smoothly
@@ -1001,6 +1004,10 @@ document.addEventListener('DOMContentLoaded', () => {
     isDashboardUnlocked = false;
     statsWidget.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none', 'scale-95');
     statsWidget.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto', 'scale-100');
+    if (statsPollInterval) {
+      clearInterval(statsPollInterval);
+      statsPollInterval = null;
+    }
   }
 
   // Core Access Control Check
@@ -1143,69 +1150,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Fetch page views increments directly
   if (!sessionStorage.getItem('carl_counted_views')) {
-    // 1. Immediately register the intent to increment
-    // Since we add BASELINE_VIEWS on display inside refreshStats(), we just increment our bonus or local estimate
-    let savedViews = parseInt(localStorage.getItem('carl_last_server_views') || '0');
-    localStorage.setItem('carl_last_server_views', String(savedViews + 1));
-    
-    // We register an offline bonus so that if the network request fails due to adblock/CSP, we still preserve the view
-    let viewsBonus = parseInt(localStorage.getItem('carl_offline_views_bonus') || '0');
-    localStorage.setItem('carl_offline_views_bonus', String(viewsBonus + 1));
-
-    // 2. Fire the global server increment in the background
+    // Fire the global server increment in the background
     fetch(`https://api.counterapi.dev/v1/${PROJECT_ID}/${VIEW_KEY}/up`)
       .then(res => {
         if (res.ok) {
           sessionStorage.setItem('carl_counted_views', 'true');
-          // Clear any temporary offline bonus because the master server accepted it successfully!
-          localStorage.setItem('carl_offline_views_bonus', '0');
           if (isDashboardUnlocked) {
-            refreshStats();
+            // Wait slightly for server write propagation
+            setTimeout(refreshStats, 400);
           }
         }
       })
       .catch(err => {
-        console.warn('Global page view increment blocked by shield/firewall. Saved locally:', err);
+        console.warn('Global page view increment blocked by shield/firewall:', err);
+        // Set storage key to true so we do not trigger loops of failing fetches
         sessionStorage.setItem('carl_counted_views', 'true');
-        if (isDashboardUnlocked) {
-          refreshStats();
-        }
       });
   }
 
-  // Fetch resume download clicks directly
-  document.querySelectorAll('a[href*="_Resume.pdf"]').forEach(anchor => {
+  // Fetch resume download clicks directly on all download anchors (case-insensitively for complete coverage)
+  document.querySelectorAll('a[href*="Resume" i]').forEach(anchor => {
     anchor.addEventListener('click', () => {
-      // 1. Instantly register download locally so they see live response
-      let savedDownloads = parseInt(localStorage.getItem('carl_last_server_downloads') || '0');
-      localStorage.setItem('carl_last_server_downloads', String(savedDownloads + 1));
-
-      let downloadsBonus = parseInt(localStorage.getItem('carl_offline_downloads_bonus') || '0');
-      localStorage.setItem('carl_offline_downloads_bonus', String(downloadsBonus + 1));
-
-      if (isDashboardUnlocked) {
-        if (downloadsEl) {
-          const currentDispCount = BASELINE_DOWNLOADS + savedDownloads + 1;
-          downloadsEl.textContent = currentDispCount.toLocaleString();
+      // Optimistic instant visual feedback if dashboard is unlocked:
+      if (isDashboardUnlocked && downloadsEl) {
+        const textVal = downloadsEl.textContent;
+        if (textVal && textVal !== '--' && textVal !== '...') {
+          const currentCount = parseInt(textVal.replace(/,/g, ''));
+          if (!isNaN(currentCount)) {
+            downloadsEl.textContent = (currentCount + 1).toLocaleString();
+          }
         }
       }
 
-      // 2. Propagate global server click update
+      // Propagate global server click update
       fetch(`https://api.counterapi.dev/v1/${PROJECT_ID}/${DOWNLOAD_KEY}/up`)
         .then(res => {
           if (res.ok) {
-            // Clear temporary offline bonus as server recorded it
-            localStorage.setItem('carl_offline_downloads_bonus', '0');
             if (isDashboardUnlocked) {
               setTimeout(refreshStats, 800);
             }
           }
         })
         .catch(err => {
-          console.warn('Global resume download tracking blocked. Saved locally:', err);
-          if (isDashboardUnlocked) {
-            setTimeout(refreshStats, 800);
-          }
+          console.warn('Global resume download tracking blocked on this connection:', err);
         });
     });
   });
